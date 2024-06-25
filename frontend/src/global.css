@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+
+*{
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    box-sizing: corder-box;    
+}
+
+.header-container{
+    background-color: #333;
+    overflow: hidden;
+}
+
+.navigation{
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font: 400 48px Roboto, sans-serif
+}
+
+.profile{
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font: 400 48px Roboto, sans-serif
+}
+
+.navigation a:hover {
+    background-color: #ddd;
+    color: black;
+  }
+
+  .navigation a.active {
+    background-color: #04AA6D;
+    color: white;
+  }
+
+
+body{
+    font: 400 14px Roboto, sans-serif;
+    background-color: #D2E1F1;
+    -webkit-font-smoothin: antialiased;
+}
+
+input, button, textarea{
+    font: 400 18px Robot, sans-serif;
+
+}
+
+button{
+    cursor: pointer;
+}
+
+form input{
+    width: 100%;
+    height: 45px;
+    color: black;
+    border: 1px solid white;
+    border-radius: 8px;
+    padding: 0 24px;
+    margin-bottom: 16px;
+}
+
+.button{
+    width: 100%px;
+    height: 60px;
+    background: black;
+    border: 0;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    margin-top: 16px;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    font-size: 18px;
+    line-height: 60px;
+    transition: filter 0.2;  /*cria uma delay na transição do elemento quando houver um comportamento de interação defenido */
+}
+
+.button:hover{ /*define o comportamento do elemento quando o mouse estiver sobre ele.*/
+    filter: brightness(70%)   /*remove o brilho do elemento*/
+}
