@@ -1,7 +1,6 @@
 const express = require('express')
-const OngController = require('./controllers/OngController');
 const UserController = require('./controllers/UserController');
-const RequestController = require('./controllers/RequestControler');
+const RequestController = require('./controllers/RequestController');
 const ProfileController = require('./controllers/ProfileController');
 // const { request } = require('http')
 // const { response } = require('express')
@@ -9,8 +8,6 @@ const ProfileController = require('./controllers/ProfileController');
 
 const routes = express.Router()
 
-routes.post('/ongs', OngController.create);
-routes.get('/ongs', OngController.index)
 
 routes.post('/users', UserController.create);
 routes.get('/users', UserController.index)

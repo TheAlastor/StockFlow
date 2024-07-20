@@ -5,51 +5,62 @@
     margin: 0;
     padding: 0;
     outline: 0;
-    box-sizing: corder-box;    
+    box-sizing: border-box;    
 }
 
 .header-container{
     width: 100%;
     background-color: #ffffff;
-    overflow: hidden;    
+    overflow: hidden;           
+    padding: 20px 60px;
+    display: flex;
+    justify-content: space-between    
 }
 
-.home-link a{
+.header-container div.home{
+    overflow: hidden; 
+    display: flex;           
+}
+
+.header-container div.navigation{   
+    overflow: hidden;   
+    display: flex;    
+}
+
+.header-container div.profile{   
+    overflow: hidden;  
+    display: flex;       
+}
+
+.home a{
     font: 400 25px Roboto, sans-serif;
-    display: inline;
-    align-items: center;
-    padding: 15px 60px;
     color: gray;
     font-size: 18px;
     text-decoration: none;
     font-weight: 500;
     transition: opacity 0.2s;
+    margin-left: 20px;
 }
 
 .navigation a{
+    font: 400 25px Roboto, sans-serif;    
+    color: gray;
+    font-size: 18px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.2s;    
+    margin-right: 70px;
+}
+
+.profile a{
     font: 400 25px Roboto, sans-serif;
-    display: inline;
-    align-items: center;
-    padding: 15px 60px;
     color: gray;
     font-size: 18px;
     text-decoration: none;
     font-weight: 500;
     transition: opacity 0.2s;
+    margin-right: 20px;
 }
-
-
-.profile{
-    float: right;
-    color: #000000;
-    text-align: center;
-    padding: 15px 60px;
-    text-decoration: none;
-    font: 400 25px Roboto, sans-serif
-}
-
-
-
 
 body{
     font: 400 14px Roboto, sans-serif;
@@ -59,7 +70,6 @@ body{
 
 input, button, textarea{
     font: 400 18px Robot, sans-serif;
-
 }
 
 button{
