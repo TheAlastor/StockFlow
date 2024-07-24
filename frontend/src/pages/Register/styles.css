@@ -38,11 +38,10 @@
 }
 
 
-.register-container section.register-login h1 { 
+h1 { 
     margin-bottom: 20px;
     color: rgb(0, 0, 0);
-    font: 400 70px Roboto, sans-serif; 
-    
+    font: 400 70px Roboto, sans-serif;     
 }
 
 .register-container section.form-register h2 {    

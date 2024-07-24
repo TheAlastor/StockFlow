@@ -25,34 +25,40 @@ export default function Register() {
 
             </form>
 
-            <h1>StockFlow</h1>
+            
 
             <div className="register-container">
+            <h1>StockFlow</h1>
                 <section className="form-register">
-                    <form>
 
-                        
+                    <div className="register-colum1">
+                        <form>
+                            <h2>Name</h2>
+                            <input placeholder="Name" />
+                            <h2>Personal E-mail</h2>
+                            <input placeholder="email@modec.com" />
+                            <h2>Password</h2>
+                            <input placeholder="password" type="password" />
+                            <h2>Last Name</h2>
+                            <input placeholder="Last Name" />
+                        </form>
+                    </div>
 
-                        <h2>Name</h2>
-                        <input placeholder="Name" />
-                        <h2>Personal E-mail</h2>
-                        <input placeholder="email@modec.com" />
-                        <h2>Password</h2>
-                        <input placeholder="password" type="password" />
-                        <h2>Last Name</h2>
-                        <input placeholder="Last Name" />
-                        <h2>Onboard Position E-mail</h2>
-                        <input placeholder="email@modec.com" />
-                        <h2>Repeat Password</h2>
-                        <input placeholder="repeat password" type="password" />
+                    <div className="register-colum2">
+                        <form>
+                            <h2>Onboard Position E-mail</h2>
+                            <input placeholder="email@modec.com" />
+                            <h2>Repeat Password</h2>
+                            <input placeholder="repeat password" type="password" />
 
-                        <Link to="#home">Forgot password</Link>
+                            <Link to="#home">Forgot password</Link>
 
-                        <h2>This is how your profile will be displayed:</h2>
+                            <h2>This is how your profile will be displayed:</h2>
 
-                        <button className="button">Create Account</button>
+                            <button className="button">Create Account</button>
+                        </form>
+                    </div>
 
-                    </form>
                 </section>
             </div>
         </div>
