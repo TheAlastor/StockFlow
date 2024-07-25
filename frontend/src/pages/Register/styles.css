@@ -13,35 +13,27 @@
     background: rgb(245, 242, 243);
     box-shadow: 0 0 100px rgba(0,0,0,0.1);
     border-radius:20px;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;   
-    padding-top: 20px;
-    padding-left: 300px;
-    padding-right: 300px;
-    padding-bottom: 20px;
+    display: flex;    
+    flex-direction: column;
+    justify-content: center;   
+    padding-top: 50px;
+    padding-left: 100px;
+    padding-right: 100px;
+    padding-bottom: 50px;
     margin-top: 80px; 
            
 }
 
-.register-container section.form-register {  
-    width: 100%; 
-    
-}
-
-.register-container section.form-register form  {
-    align-items: center;    
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-    /*para dar distância entre os elementos*/
-}
-
-
 h1 { 
     margin-bottom: 20px;
     color: rgb(0, 0, 0);
-    font: 400 70px Roboto, sans-serif;     
+    font: 400 70px Roboto, sans-serif;       
+    text-align: center;
+}
+
+.register-container section.form-register {  
+    width: 100%; 
+    display: flex;    
 }
 
 .register-container section.form-register h2 {    
@@ -49,25 +41,80 @@ h1 {
     margin-top: 5px;        
 }
 
-.register-container section.form-register input {    
-    margin-bottom: 5px;        
+.register-container div.register-colum1 {   
+    margin-right: 50px;    
 }
 
-.register-container section.form-register button {    
-    margin-top: 5px;        
-}
-
-.register-container section.form-register a {
+.register-container div.register-upload {
+    align-items: center;    
     display: flex;
-    align-items: center;
-    margin-top: 5px;
-    color: gray;
-    font-size: 15px;
-    text-decoration: none;
-    font-weight: 500;
-    transition: opacity 0.2s;
+    width: 100%;
+    flex-direction: line;    
 }
 
-.register-container section.form-register a:hover {
-    opacity: 0.8;
+.register-container section.form-register input {    
+    margin-bottom: 15px;
+    width: 300px;       
+}
+
+
+div.register-upload{      
+    display: flex;    
+    flex-direction: line;   
+}
+
+.picture-input{
+    display: none;
+}
+
+div.user-profile{    
+    background: rgb(255, 255, 255);   
+    display: flex;    
+    flex-direction: line;     
+    border-radius: 8px;    
+    height: 45px;
+    margin-left: 5px;
+    margin-right: 5px;
+    text-indent: 15px;
+    text-align: center;
+    color: rgb(0, 0, 0);
+}
+
+.user-picture {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black; /* Optional: to add a border around the circle */
+  }
+
+.circular-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+button.button-upload{    
+    display: inline-block;
+    text-align: justify;
+    height: 45px;    
+    background: black;
+    border: 0;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;    
+    text-decoration: none;
+    font-size: 18px;
+    transition: filter 0.2;  /*cria uma delay na transição do elemento quando houver um comportamento de interação defenido */
+}
+
+button.button{    
+    margin-top: 15px;
+}
+
+button:hover{ /*define o comportamento do elemento quando o mouse estiver sobre ele.*/
+    filter: brightness(70%)   /*remove o brilho do elemento*/
 }
