@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import './styles.css'
 import { FiLogIn } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
-import userImage from 'C:/Users/vinic/Desktop/StockFlow/user.png'
+import userImage from 'C:/Users/vinic/Desktop/StockFlow/frontend/src/user.png'
 
 export default function Register() {
   /////////////// Get First and Last Name for Profile Preview /////
@@ -47,13 +47,13 @@ export default function Register() {
         </div>
 
         <div className="navigation">
-          <Link to="#news">News</Link>
-          <Link to="#contact">Contact</Link>
-          <Link to="#about">About</Link>
+          <Link to="http://localhost:3000/Request">New Requests</Link>
+          <Link to="http://localhost:3000/MyRequests">My Requests</Link>
+          <Link to="http://localhost:3000/AllRequests">All Requests</Link>
         </div>
 
         <div className="profile">
-          <Link to="#profile">Profile</Link>
+          <Link to="http://localhost:3000/Account">Account Settings</Link>
         </div>
       </form>
 
@@ -63,11 +63,16 @@ export default function Register() {
           <div className="register-colum1">
             <form>
               <h2>Name</h2>
-              <input placeholder="Name" onChange={handleInputNameChange} />
+              <input
+                placeholder="Name"
+                onChange={handleInputNameChange}
+                maxLength={10}
+                tabIndex="1"
+              />
               <h2>Personal E-mail</h2>
-              <input placeholder="email@modec.com" />
+              <input placeholder="email@modec.com" tabIndex="3" />
               <h2>Password</h2>
-              <input placeholder="password" type="password" />
+              <input placeholder="password" type="password" tabIndex="4" />
             </form>
           </div>
 
@@ -77,11 +82,16 @@ export default function Register() {
               <input
                 placeholder="Last Name"
                 onChange={handleInputLastNameChange}
+                tabIndex="2"
               />
               <h2>Onboard Position E-mail</h2>
-              <input placeholder="email@modec.com" />
+              <input placeholder="email@modec.com" tabIndex="3" />
               <h2>Repeat Password</h2>
-              <input placeholder="repeat password" type="password" />
+              <input
+                placeholder="repeat password"
+                type="password"
+                tabIndex="5"
+              />
             </form>
           </div>
         </section>
