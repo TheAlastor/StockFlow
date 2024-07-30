@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import './styles.css'
 import { FiLogIn } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
-import userImage from 'C:/Users/vinic/Desktop/StockFlow/frontend/src/user.png'
+import userImage from '../../../src/user.png'
 
 export default function Register() {
   /////////////// Get First and Last Name for Profile Preview /////
@@ -129,6 +129,8 @@ export default function Register() {
         </div>
         <button className="button-create">Create Account</button>
       </div>
+
+      
     </div>
   )
 }

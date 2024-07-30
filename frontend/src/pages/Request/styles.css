@@ -1,0 +1,127 @@
+.request-page-container{
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    font: 400 15px Roboto, sans-serif;
+    margin-bottom: 60px;
+}
+
+
+.request-container{
+    width: fit-content;
+    background: rgb(245, 242, 243);
+    box-shadow: 0 0 100px rgba(0,0,0,0.1);
+    border-radius:20px;
+    display: flex;    
+    flex-direction: column;
+    justify-content: center;   
+    padding-top: 20px;
+    padding-left: 100px;
+    padding-right: 100px;
+    padding-bottom: 50px;
+    margin-top: 80px;           
+}
+
+h1 { 
+    margin-bottom: 20px;
+    color: rgb(0, 0, 0);
+    font: 400 70px Roboto, sans-serif;       
+    text-align: center;
+    margin-bottom: 60px;
+    
+}
+
+.request-container section.form-request {      
+    display: flex;        
+}
+
+.request-container section.form-request h2 {    
+    margin-bottom: 5px;
+    margin-top: 5px;        
+}
+
+.request-container div.request-colum1 {   
+    margin-right: 50px;    
+}
+
+.request-container section.form-request input {    
+    margin-bottom: 15px;
+    width: 300px;      
+}
+
+
+div.user-requester{    
+    width: 300px;
+    margin-bottom: 15px;       
+    background: rgb(255, 255, 255);          
+    height: 45px; 
+    border-radius: 8px;    
+    text-indent: 15px;
+    color: black;
+    border: 1px solid white; 
+    display: flex;        
+    align-items: center;     
+}
+
+
+
+
+button.button-upload{        
+    text-align: center;    
+    height: 45px;
+    width: 50px;
+    padding: 4px;   
+    background: black;
+    border: 0;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;    
+    text-decoration: none;
+    font-size: 12px;
+    transition: filter 0.2;  /*cria uma delay na transição do elemento quando houver um comportamento de interação defenido */
+}
+
+button.button-create{        
+    width: 100%;
+    height: 45px;    
+    margin-top: 15px;
+    background: black;
+    border: 0;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    font-size: 18px;
+    transition: filter 0.2;  /*cria uma delay na transição do elemento quando houver um comportamento de interação defenido */
+}
+
+button:hover{ /*define o comportamento do elemento quando o mouse estiver sobre ele.*/
+    filter: brightness(70%)   /*remove o brilho do elemento*/
+}
+
+
+.tab-buttons {
+    display: flex;
+    margin-bottom: 10px;
+  }
+  
+  .tab-buttons button {
+    padding: 10px 20px;
+    margin-right: 5px;
+    cursor: pointer;
+  }
+  
+  .tab-buttons button.active {
+    background-color: #007bff;
+    color: white;
+    border: none;
+  }
+  
+  .tab-content {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-top: none;
+  }
