@@ -3,8 +3,9 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import Logon from './pages/Logon';
 import Register from './pages/Register';
-import Request from './pages/Request';
+import Requests from './pages/Requests';
 import Menu from './pages/Menu';
+import NewRequest from './pages/NewRequest'
 
 export default function AllRoutes(){
     return(
@@ -13,7 +14,8 @@ export default function AllRoutes(){
             <Route path="/" element={<Logon/>}/>            
             <Route path="/register" element={<Register/>}/>
             <Route path="/menu" element={<Menu/>}/> 
-            <Route path="/request" element={<Request/>}/> 
+            <Route path="/requests" element={<Requests/>}/> 
+            <Route path="/NewRequest" element={<NewRequest/>}/>
             </Routes>
         </BrowserRouter>
     );

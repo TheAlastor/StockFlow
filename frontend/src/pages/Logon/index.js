@@ -12,7 +12,7 @@ export default function Logon() {
         </div>
 
         <div className="navigation">
-          <Link to="http://localhost:3000/Request">New Requests</Link>
+          <Link to="http://localhost:3000/NewRequest">New Requests</Link>
           <Link to="http://localhost:3000/MyRequests">My Requests</Link>
           <Link to="http://localhost:3000/AllRequests">All Requests</Link>
         </div>

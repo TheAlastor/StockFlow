@@ -12,7 +12,7 @@ export default function Menu() {
         </div>
 
         <div className="navigation">
-          <Link to="http://localhost:3000/Request">New Requests</Link>
+          <Link to="http://localhost:3000/NewRequest">New Requests</Link>
           <Link to="http://localhost:3000/MyRequests">My Requests</Link>
           <Link to="http://localhost:3000/AllRequests">All Requests</Link>
         </div>
@@ -27,7 +27,7 @@ export default function Menu() {
       <div className="menu-container">
         <section className="form-menu">
           <form>
-            <Link to="#createRequest">Create New Request</Link>
+            <Link to="http://localhost:3000/NewRequest">Create New Request</Link>
             <Link to="#myRequests">My Requests</Link>
             <Link to="#allRequests">All Requests</Link>
             <Link to="#accountSettings">Account Settings</Link>
