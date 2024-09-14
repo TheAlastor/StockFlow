@@ -2,10 +2,30 @@ import React, { useState } from 'react'
 import './styles.css'
 import { FiLogIn } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
+import api from '../../services/api'
 
-export default function Logon() {
+export default function NewRequest() {
+  const userID = localStorage.getItem(user_id)
 
+  async function handleRegister(e) {
+    e.preventDefault()
 
+    const dataRequest = {
+      reservation,
+      activeUrgencyTab,
+      comments,
+      step,
+      userID
+    }
+
+    try {
+      const response = await api.post('requests', dataRequest)
+      await api.post('material', dataMaterial)
+      alert(`Seu ID de acesso: ${response.dataRequest.id}`)
+    } catch (err) {
+      alert('Erro no cadastro')
+    }
+  }
 
   const [reservation, setReservation] = useState()
   function inputReservation(e) {
@@ -14,16 +34,17 @@ export default function Logon() {
 
   const [activeUrgencyTab, setActiveUrgencyTab] = useState('No')
   function handleTabUrgencyClick(tab) {
-    setActiveUrgencyTab(tab);
+    setActiveUrgencyTab(tab)
   }
-
 
   const [comments, setComments] = useState()
   function inputComments(e) {
     setComments(e.target.value)
   }
 
-  const [data, setData] = useState([{ code:"",quantity:"",withdraw:"No"}])
+  const [dataMaterial, setData] = useState([
+    { code: '', quantity: '', withdraw: 'No' }
+  ])
 
   function lineChange(e, i) {
     const { name, value } = e.target
@@ -32,18 +53,18 @@ export default function Logon() {
     setData(onchangeVal)
   }
 
-  const [activeLineTab, setActiveLineTab] =  useState('No')
+  const [activeLineTab, setActiveLineTab] = useState('No')
   function handleLineTabClick(tab, i) {
-    setActiveLineTab(tab);    
+    setActiveLineTab(tab)
     const name = 'withdraw'
     const value = tab
     const onchangeVal = [...data]
-    onchangeVal[i][name] = value    
-    setData(onchangeVal) 
+    onchangeVal[i][name] = value
+    setData(onchangeVal)
   }
 
   function addLine() {
-    setData([...data,{code:"",quantity:"",withdraw:"No"}])
+    setData([...data, { code: '', quantity: '', withdraw: 'No' }])
   }
 
   function deleteLine(i) {
@@ -52,11 +73,7 @@ export default function Logon() {
     setData(deleteVal)
   }
 
-
   return (
-
-
-
     <div className="request-page-container">
       <form className="header-container">
         <div className="home">
@@ -75,81 +92,117 @@ export default function Logon() {
       </form>
 
       <div className="request-container">
-        <h1>StockFlow </h1>
+        <h1>StockFlow</h1>
         <section className="form-request">
           <div className="request-colum1">
             <form>
               <h2>Requester</h2>
 
-              <div className="user-requester">
-                <h3>
-                  User Name
-                </h3>
-              </div>
+              <input
+                placeholder="User Name"
+                className="request-userName"
+                value={userName}
+              />
 
               <h2>Reservation Number</h2>
-              <input placeholder="XXXXXX" maxLength={6} tabIndex="1" className='request-reservation' />
-
+              <input
+                placeholder="XXXXXX"
+                maxLength={6}
+                tabIndex="1"
+                className="request-reservation"
+                value="RQ-0001-24"
+              />
             </form>
             <h2>Urgent?</h2>
             <div className="tab-buttons">
-              <button onClick={() => handleTabUrgencyClick('No')} className={activeUrgencyTab === 'No' ? 'active' : ''}>
+              <button
+                onClick={() => handleTabUrgencyClick('No')}
+                className={activeUrgencyTab === 'No' ? 'active' : ''}
+              >
                 No
               </button>
-              <button onClick={() => handleTabUrgencyClick('Yes')} className={activeUrgencyTab === 'Yes' ? 'active' : ''}>
+              <button
+                onClick={() => handleTabUrgencyClick('Yes')}
+                className={activeUrgencyTab === 'Yes' ? 'active' : ''}
+              >
                 Yes
               </button>
             </div>
             <h2>Comments</h2>
-            <input placeholder="Enter your observation here (optional)" maxLength={150} tabIndex="2" className='request-comments' />
-            <button className="button-create">Submit</button>
+            <input
+              placeholder="Enter your observation here (optional)"
+              maxLength={150}
+              tabIndex="2"
+              className="request-comments"
+              onChange={e => inputComments(e)}
+            />
+            <button onClick={handleRegister} className="button-create">
+              Submit
+            </button>
           </div>
 
           <div className="request-colum2">
+            {dataMaterial.map((val, i) => (
+              <div className="request-line1" key={i}>
+                <form>
+                  <h2>SAP Code</h2>
+                  <input
+                    placeholder="610000000"
+                    tabIndex="3"
+                    name="code"
+                    value={val.code}
+                    onChange={e => lineChange(e, i)}
+                    className="request-SAP"
+                  />
+                </form>
 
-          { 
-          data.map((val, i) =>
-            <div className="request-line1" key={i}>
-              <form>
-                <h2>SAP Code</h2>
-                <input
-                  placeholder="610000000"
-                  tabIndex="3" name="code" value={val.code} onChange={(e) => lineChange(e, i)}
-                  className='request-SAP'
-                />
-              </form>
+                <form>
+                  <h2>Quantity</h2>
 
-              <form>
-                <h2>Quantity</h2>
+                  <input
+                    placeholder="XX units"
+                    tabIndex="4"
+                    name="quantity"
+                    value={val.quantity}
+                    onChange={e => lineChange(e, i)}
+                    className="request-quantity"
+                  />
+                </form>
 
-                
-                <input placeholder="XX units" tabIndex="4" name="quantity" value={val.quantity} onChange={(e) => lineChange(e, i)} className='request-quantity' />
-              </form>
+                <form>
+                  <h2>Already withdraw?</h2>
+                  <div className="tab-buttons">
+                    <button
+                      type="button"
+                      onClick={() => handleLineTabClick('No', i)}
+                      className={val.withdraw === 'No' ? 'active' : ''}
+                    >
+                      No
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleLineTabClick('Yes', i)}
+                      className={val.withdraw === 'Yes' ? 'active' : ''}
+                    >
+                      Yes
+                    </button>
+                  </div>
+                </form>
 
-              <form>
-                <h2>Already withdraw?</h2>
-                <div className="tab-buttons">
-                  <button type="button" onClick={() => handleLineTabClick('No', i)} className={val.withdraw === 'No' ? 'active' : ''}>
-                    No
-                  </button>
-                  <button type="button" onClick={() => handleLineTabClick('Yes', i)} className={val.withdraw === 'Yes' ? 'active' : ''}>
-                    Yes                    
-                  </button>              
-                </div>                
-              </form>              
-
-              <button  style={{visibility:i<1 ? 'hidden' : 'visible'}} onClick={() => deleteLine(i)} className='deleteLine'>Delete</button>
-            </div>
-          )}
-            <button onClick={addLine} className='addLine'>Add</button>
-            
+                <button
+                  style={{ visibility: i < 1 ? 'hidden' : 'visible' }}
+                  onClick={() => deleteLine(i)}
+                  className="deleteLine"
+                >
+                  Delete
+                </button>
+              </div>
+            ))}
+            <button onClick={addLine} className="addLine">
+              Add
+            </button>
           </div>
-
-          
-               
-          
         </section>
-
       </div>
     </div>
   )

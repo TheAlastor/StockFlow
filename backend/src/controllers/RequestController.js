@@ -1,39 +1,24 @@
-const connection = require('../database/connection');
+const connection = require('../database/connection')
 
-module.exports={
+module.exports = {
+  async index(request, response) {
+    const requests = await connection('requests').select('*')
+    return response.json(requests)
+  },
 
-    async index(request, response) {
-        const requests = await connection('requests').select('*');
-        return response.json(requests);
-    },
-   
+  async create(request, response) {
+    //captura os dados para criação de solicitação
+    const { reservation, urgency, comments, step } = request.body
+    const user_id = request.headers.authorization
 
-    async create(request, response) {
+    const [id] = await connection('requests').insert({
+      reservation,
+      urgency,
+      comments,
+      step,
+      user_id
+    })
 
-        //captura os dados para criação de solicitação
-        const { reservation, urgency, step, comments } = request.body;
-        const user_id = request.headers.authorization;
-      
-       const [id] = await connection('requests').insert({ 
-          reservation,
-          urgency,
-          step,
-          comments,
-          user_id
-        })
-
-        const { code, quantity, available, delivered } = request.body;
-        const request_id = request.headers.authorization;
-      
-       await connection('materials').insert({
-        code,
-        quantity,
-        available,
-        delivered,
-        request_id          
-        })
-
-    return response.json({ id });
-
-    } 
-};
+    return response.json({ id })
+  }
+}
