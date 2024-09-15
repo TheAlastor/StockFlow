@@ -3,11 +3,10 @@ exports.up = function (knex) {
     //table.increments('material_id')
     table.integer('code').notNullable()
     table.string('quantity').primary()
-    table.bool('delivered').notNullable()
-    table.bool('available').notNullable()
-
-    table.string('request_id').notNullable()
-    table.foreign('request_id').references('request_id').inTable('requests')
+    table.bool('status').notNullable()
+    
+    table.string('reservation').notNullable() 
+    table.foreign('reservation').references('reservation').inTable('requests')
   })
 }
 

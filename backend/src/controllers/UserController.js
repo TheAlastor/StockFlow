@@ -1,5 +1,6 @@
 const connection = require('../database/connection');
-// const crypto = require('crypto');
+const crypto = require('crypto');
+const bcrypt = require('bcrypt');
 
 module.exports = {
 
@@ -12,12 +13,14 @@ module.exports = {
     async create(request, response) {
 
         //captura os dados para criação de usuário e verifica duplicidade pelo e-mail pessoal
-        const { name, password, p_mail, f_email, picture } = request.body;
+        const { name, password, p_mail, f_mail, picture } = request.body;
 
-        const userExists = await connection('users').findOne(p_mail);
+        console.log(request.body)
+        
+        /*const userExists = await connection('users').where("p_mail").first();
         if (userExists) {
             return response.status(422).json({ msg: 'Esse usuário já existe, utilize outre endereço de e-mail pessoal' })
-        }
+        } */
 
         //criptografa a senha do usuário e cria um ID único
         const salt = await bcrypt.genSalt(12)
@@ -30,11 +33,11 @@ module.exports = {
             name,
             password: passwordHash,
             p_mail,
-            f_email,
+            f_mail,
             picture
         })
 
-        return response.json({ id });
+        return response.json({ user_id });
     },
 
     async update(request, response) {

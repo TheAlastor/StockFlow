@@ -8,10 +8,10 @@ module.exports = {
 
   async create(request, response) {
     const dataMaterial = request.body
-    const request_id = request.headers.authorization
+    
 
     await connection('materials').insert({
-      dataMaterial
+      dataMaterial      
     })
   }
 }

@@ -5,36 +5,55 @@ import { Link } from 'react-router-dom'
 import api from '../../services/api'
 
 export default function NewRequest() {
-  const userID = localStorage.getItem(user_id)
+  /*const userID = localStorage.getItem(user_id)*/
 
   async function handleRegister(e) {
     e.preventDefault()
 
+    const dataMaterialSend = addReservation(dataMaterial, reservation, reservation)
+
+    const step = findStep(dataMaterialSend, "status")  === true ? '3' : '1'
+
     const dataRequest = {
       reservation,
-      activeUrgencyTab,
+      urgency,
       comments,
-      step,
-      userID
+      step      
     }
-
+    
     try {
       const response = await api.post('requests', dataRequest)
-      await api.post('material', dataMaterial)
+
+      await api.post('material', dataMaterialSend)
+
       alert(`Seu ID de acesso: ${response.dataRequest.id}`)
-    } catch (err) {
-      alert('Erro no cadastro')
+    } 
+    
+    catch (err) {
+      alert('Erro no cadastro: ' + err.message)
     }
+  }
+
+  function addReservation(objectsArray, fieldName, valueToAdd) {
+    return objectsArray.map(obj => {      
+        obj[fieldName] = valueToAdd;      
+      return obj;
+    });
+  }
+ 
+  function findStep(objectsArray, fieldName) {    
+
+  return objectsArray.every(obj => obj[fieldName] === "2");
   }
 
   const [reservation, setReservation] = useState()
   function inputReservation(e) {
-    setReservation(e.target.value)
+    setReservation(e.target.value)    
   }
 
-  const [activeUrgencyTab, setActiveUrgencyTab] = useState('No')
+  const [urgency, setActiveUrgencyTab] = useState('No')
   function handleTabUrgencyClick(tab) {
-    setActiveUrgencyTab(tab)
+    setActiveUrgencyTab(tab === 'Yes' ? '1' : '0')
   }
 
   const [comments, setComments] = useState()
@@ -42,35 +61,35 @@ export default function NewRequest() {
     setComments(e.target.value)
   }
 
-  const [dataMaterial, setData] = useState([
-    { code: '', quantity: '', withdraw: 'No' }
+  const [dataMaterial, setMaterialData] = useState([
+    { code: '', quantity: '', status: '0', reservation: '' }
   ])
 
   function lineChange(e, i) {
     const { name, value } = e.target
-    const onchangeVal = [...data]
+    const onchangeVal = [...dataMaterial]
     onchangeVal[i][name] = value
-    setData(onchangeVal)
+    setMaterialData(onchangeVal)
   }
 
   const [activeLineTab, setActiveLineTab] = useState('No')
   function handleLineTabClick(tab, i) {
     setActiveLineTab(tab)
-    const name = 'withdraw'
-    const value = tab
-    const onchangeVal = [...data]
+    const name = 'status'
+    const value = tab === 'Yes' ? '2' : '0'
+    const onchangeVal = [...dataMaterial]
     onchangeVal[i][name] = value
-    setData(onchangeVal)
+    setMaterialData(onchangeVal)
   }
 
   function addLine() {
-    setData([...data, { code: '', quantity: '', withdraw: 'No' }])
+    setMaterialData([...dataMaterial, { code: '', quantity: '', status: '0' }])
   }
 
   function deleteLine(i) {
-    const deleteVal = [...data]
+    const deleteVal = [...dataMaterial]
     deleteVal.splice(i, 1)
-    setData(deleteVal)
+    setMaterialData(deleteVal)
   }
 
   return (
@@ -101,29 +120,29 @@ export default function NewRequest() {
               <input
                 placeholder="User Name"
                 className="request-userName"
-                value={userName}
+                value={"userName"}
               />
 
               <h2>Reservation Number</h2>
               <input
-                placeholder="XXXXXX"
-                maxLength={6}
+                placeholder="XXXXXXX"
+                maxLength={7}
                 tabIndex="1"
-                className="request-reservation"
-                value="RQ-0001-24"
+                className="request-reservation"                
+                onChange={e => inputReservation(e)}
               />
             </form>
             <h2>Urgent?</h2>
             <div className="tab-buttons">
               <button
                 onClick={() => handleTabUrgencyClick('No')}
-                className={activeUrgencyTab === 'No' ? 'active' : ''}
+                className={urgency === '0' ? 'active' : ''}
               >
                 No
               </button>
               <button
                 onClick={() => handleTabUrgencyClick('Yes')}
-                className={activeUrgencyTab === 'Yes' ? 'active' : ''}
+                className={urgency === '1' ? 'active' : ''}
               >
                 Yes
               </button>
@@ -175,14 +194,14 @@ export default function NewRequest() {
                     <button
                       type="button"
                       onClick={() => handleLineTabClick('No', i)}
-                      className={val.withdraw === 'No' ? 'active' : ''}
+                      className={val.status === '0' ? 'active' : ''}
                     >
                       No
                     </button>
                     <button
                       type="button"
                       onClick={() => handleLineTabClick('Yes', i)}
-                      className={val.withdraw === 'Yes' ? 'active' : ''}
+                      className={val.status === '2' ? 'active' : ''}
                     >
                       Yes
                     </button>
