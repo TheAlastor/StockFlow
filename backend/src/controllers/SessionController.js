@@ -8,11 +8,9 @@ module.exports = {
   async index(request, response) {
     // verifica se o usuário existe e verifica, se existir, verifica se a senha está correta
 
-    const p_mail = request.body.p_mail
-    const password = request.body.password
+    const {p_mail, password } = request.body    
 
-    const userExist = await connection('users').where({ p_mail }).first()
-    const checkPassword = await bcrypt.compare(password, userExist.password)
+    const userExist = await connection('users').where({p_mail}).first()    
 
     if (!userExist) {
       return response.status(400).json({
@@ -20,17 +18,24 @@ module.exports = {
       })
     }
 
+    const checkPassword = await bcrypt.compare(password, userExist.password)
+
     if (!checkPassword) {
-      return response.status(422).json({ error: 'Senha invalida' })
+      return response.status(422).json({ msg: 'Senha invalida' })
     }
 
-    const sessionId = userExist.user_id
+    
     const secret = 'AAAAAAAAAAAAA'
     const sessionToken = jwt.sign({ id: userExist.user_id }, secret)
-
+    const sessionId = userExist.user_id
+    const name = userExist.name
+    const picture = userExist.picture
+    
     const session = {
       sessionId,
-      sessionToken
+      sessionToken,
+      name,
+      picture
     }
 
     return response.json(session)

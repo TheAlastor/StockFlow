@@ -68,7 +68,7 @@
     margin-top: 5px;        
 }
 
-.logon-container section.form-login a {
+.logon-container section.form-login form a.forgot-password {
     display: flex;
     align-items: center;
     margin-top: 5px;
@@ -81,4 +81,16 @@
 
 .logon-container section.form-login a:hover {
     opacity: 0.8;
+}
+
+.logon-container section.form-login form a.link-wrapper{
+    display: inline-block;  /* Wrap the button properly */
+    text-decoration: none;  /* Remove the link underline */
+    color: inherit;         /* Inherit the color from the surrounding context */
+    width: 90%;
+}
+
+.logon-container section.form-login form a.link-wrapper button{
+    
+    width: 100%;
 }

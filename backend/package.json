@@ -4,7 +4,7 @@
   "main": "index.js",
   "proxy": "http://localhost:3000/",
   "scripts": {
-    "start": "nodemon src/index.js --inspect"
+    "start": "nodemon --inspect src/index.js"
   },
   "keywords": [],
   "author": "",

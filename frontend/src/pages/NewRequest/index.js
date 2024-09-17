@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import api from '../../services/api'
 
 export default function NewRequest() {
-  /*const userID = localStorage.getItem(user_id)*/
+  const userID = localStorage.getItem(id)
 
   async function handleRegister(e) {
     e.preventDefault()
@@ -24,7 +24,7 @@ export default function NewRequest() {
     try {
       const response = await api.post('requests', dataRequest)
 
-      await api.post('material', dataMaterialSend)
+      //await api.post('material', dataMaterialSend)
 
       alert(`Seu ID de acesso: ${response.dataRequest.id}`)
     } 

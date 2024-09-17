@@ -16,7 +16,7 @@ routes.get('/requests', RequestController.index)
 
 routes.get('/profile', ProfileController.index)
 
-routes.get('/session', SessionController.index)
+routes.post('/session', SessionController.index)
 
 function checkToken(request, response, next) {
   const authHeader = request.headers['authorization']

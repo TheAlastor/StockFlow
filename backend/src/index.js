@@ -3,6 +3,7 @@ const routes = require('./routes')
 const cors = require('cors')
 
 const app = express()
+app.listen(3333)
 
 app.use(
   cors({
@@ -13,7 +14,7 @@ app.use(
 )
 app.use(express.json())
 app.use(routes)
-app.listen(3333)
+
 
 /* 
 GET:  buscar/listar info do back end
