@@ -231,3 +231,6 @@ button.Confirm-reservation{
     border: 1px solid rgb(0, 0, 0);  
 }
 
+.details{
+    margin-bottom: 10px;
+}

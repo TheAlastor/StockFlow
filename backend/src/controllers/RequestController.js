@@ -9,6 +9,7 @@ module.exports = {
   async create(request, response) {
     //captura os dados para criação de solicitação
     const { reservation, urgency, comments, step } = request.body
+    console.log(request)
     const user_id = request.headers.authorization
 
     const [id] = await connection('requests').insert({

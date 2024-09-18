@@ -8,9 +8,9 @@ module.exports = {
   async index(request, response) {
     // verifica se o usuário existe e verifica, se existir, verifica se a senha está correta
 
-    const {p_mail, password } = request.body    
+    const { p_mail, password } = request.body
 
-    const userExist = await connection('users').where({p_mail}).first()    
+    const userExist = await connection('users').where({ p_mail }).first()
 
     if (!userExist) {
       return response.status(400).json({
@@ -24,13 +24,12 @@ module.exports = {
       return response.status(422).json({ msg: 'Senha invalida' })
     }
 
-    
     const secret = 'AAAAAAAAAAAAA'
     const sessionToken = jwt.sign({ id: userExist.user_id }, secret)
     const sessionId = userExist.user_id
     const name = userExist.name
     const picture = userExist.picture
-    
+
     const session = {
       sessionId,
       sessionToken,

@@ -5,9 +5,8 @@ import React, { useState } from 'react'
 import api from '../../services/api'
 
 export default function Logon() {
+  const navigate = useNavigate()
 
-  const navigate = useNavigate();
-  
   async function handleLogin(e) {
     e.preventDefault()
 
@@ -15,26 +14,22 @@ export default function Logon() {
       p_mail,
       password
     }
-      
+
     try {
-      
-      const response = await api.post('session', login)    
+      const response = await api.post('session', login)
 
       sessionStorage.setItem('id', response.data.sessionId)
       sessionStorage.setItem('token', response.data.sessionToken)
       sessionStorage.setItem('name', response.data.name)
       sessionStorage.setItem('picture', response.data.picture)
 
-      alert(`Login em sucedido. Seu ID de acesso: ${response.data.sessionId}`)      
-      navigate('/Menu');
-
-    } catch (err) {      
+      alert(`Login em sucedido. Seu ID de acesso: ${response.data.sessionId}`)
+      navigate('/Menu')
+    } catch (err) {
       alert('Falha no login: ' + err.response.data.msg)
     }
-
   }
 
-       
   const [p_mail, setP_Mail] = useState('None')
   function inputP_Mail(e) {
     setP_Mail(e.target.value)
@@ -81,16 +76,17 @@ export default function Logon() {
             <button className="button" onClick={handleLogin}>
               Login
             </button>
-            <Link to="Recover" className='forgot-password'>Forgot password</Link>
+            <Link to="Recover" className="forgot-password">
+              Forgot password
+            </Link>
 
             <h4>OR</h4>
 
             <input placeholder="email@modec.com" />
-            
-            <Link to="Register" className ="link-wrapper">
-            <button className="button">Sign up with personal e-mail</button>
+
+            <Link to="Register" className="link-wrapper">
+              <button className="button">Sign up with personal e-mail</button>
             </Link>
-            
           </form>
         </section>
       </div>

@@ -1,12 +1,16 @@
 const express = require('express')
+
+const SessionController = require('./controllers/SessionController')
 const UserController = require('./controllers/UserController')
 const RequestController = require('./controllers/RequestController')
+const MaterialController = require('./controllers/MaterialController')
 const ProfileController = require('./controllers/ProfileController')
-const SessionController = require('./controllers/SessionController')
 // const { request } = require('http')
 // const { response } = require('express')
 
 const routes = express.Router()
+
+routes.post('/session', SessionController.index)
 
 routes.post('/users', UserController.create)
 routes.get('/users', UserController.index)
@@ -14,9 +18,10 @@ routes.get('/users', UserController.index)
 routes.post('/requests', RequestController.create)
 routes.get('/requests', RequestController.index)
 
-routes.get('/profile', ProfileController.index)
+routes.post('/materials', MaterialController.create)
+routes.get('/materials', MaterialController.index)
 
-routes.post('/session', SessionController.index)
+routes.get('/profile', ProfileController.index)
 
 function checkToken(request, response, next) {
   const authHeader = request.headers['authorization']

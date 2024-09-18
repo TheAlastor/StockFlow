@@ -1,57 +1,69 @@
 import React, { useState } from 'react'
 import './styles.css'
 import { FiLogIn } from 'react-icons/fi'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import api from '../../services/api'
 
 export default function NewRequest() {
-  const userID = localStorage.getItem(id)
+  const userName = sessionStorage.getItem('name')
+  const userID = sessionStorage.getItem('id')
+  const navigate = useNavigate()
 
   async function handleRegister(e) {
     e.preventDefault()
 
-    const dataMaterialSend = addReservation(dataMaterial, reservation, reservation)
+    //Adiciona o número da reserva à todos os materiais que serão criados com a reserva
+    const dataMaterialSend = addReservation(
+      dataMaterial,
+      'reservation',
+      reservation
+    )
 
-    const step = findStep(dataMaterialSend, "status")  === true ? '3' : '1'
+    //Executa a função para mapear o array e identificar o step final da reserva criada
+    const step = findStep(dataMaterialSend, 'status') === true ? '3' : '1'
 
     const dataRequest = {
       reservation,
       urgency,
       comments,
-      step      
+      step
     }
-    
+
     try {
-      const response = await api.post('requests', dataRequest)
+      const response = await api.post('requests', dataRequest, {
+        headers: {
+          Authorization: userID
+        }
+      })
 
-      //await api.post('material', dataMaterialSend)
+      await api.post('materials', dataMaterialSend)
 
-      alert(`Seu ID de acesso: ${response.dataRequest.id}`)
-    } 
-    
-    catch (err) {
-      alert('Erro no cadastro: ' + err.message)
+      alert(
+        `Solicitação criada. Identificação da Solicitação: ${response.data.id}`
+      )
+      navigate('/Menu')
+    } catch (err) {
+      alert('Erro na Solicitação: ' + err.response.data.msg)
     }
   }
 
   function addReservation(objectsArray, fieldName, valueToAdd) {
-    return objectsArray.map(obj => {      
-        obj[fieldName] = valueToAdd;      
-      return obj;
-    });
+    return objectsArray.map(obj => {
+      obj[fieldName] = valueToAdd
+      return obj
+    })
   }
- 
-  function findStep(objectsArray, fieldName) {    
 
-  return objectsArray.every(obj => obj[fieldName] === "2");
+  function findStep(objectsArray, fieldName) {
+    return objectsArray.every(obj => obj[fieldName] === '2')
   }
 
   const [reservation, setReservation] = useState()
   function inputReservation(e) {
-    setReservation(e.target.value)    
+    setReservation(e.target.value)
   }
 
-  const [urgency, setActiveUrgencyTab] = useState('No')
+  const [urgency, setActiveUrgencyTab] = useState('0')
   function handleTabUrgencyClick(tab) {
     setActiveUrgencyTab(tab === 'Yes' ? '1' : '0')
   }
@@ -120,7 +132,7 @@ export default function NewRequest() {
               <input
                 placeholder="User Name"
                 className="request-userName"
-                value={"userName"}
+                value={userName}
               />
 
               <h2>Reservation Number</h2>
@@ -128,7 +140,7 @@ export default function NewRequest() {
                 placeholder="XXXXXXX"
                 maxLength={7}
                 tabIndex="1"
-                className="request-reservation"                
+                className="request-reservation"
                 onChange={e => inputReservation(e)}
               />
             </form>

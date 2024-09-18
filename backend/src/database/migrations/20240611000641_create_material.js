@@ -1,11 +1,11 @@
 exports.up = function (knex) {
   return knex.schema.createTable('materials', function (table) {
-    //table.increments('material_id')
+    table.increments('material_id').primary()
     table.integer('code').notNullable()
-    table.string('quantity').primary()
+    table.string('quantity').notNullable()
     table.bool('status').notNullable()
-    
-    table.string('reservation').notNullable() 
+
+    table.integer('reservation').notNullable()
     table.foreign('reservation').references('reservation').inTable('requests')
   })
 }
