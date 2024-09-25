@@ -21,7 +21,13 @@
     padding-right: 100px;
     padding-bottom: 70px;
     margin-top: 80px;
+
 }
+
+div .request-details input{
+    pointer-events: none;
+      cursor: none;
+    }
 
 .requests-container h1 {
     margin-bottom: 20px;
@@ -233,4 +239,25 @@ button.Confirm-reservation{
 
 .details{
     margin-bottom: 10px;
+    
 }
+
+div.requests-lines .tab-buttons button {
+    width: 50px;
+    height: 45px;
+    margin-right: 5px;
+    cursor: pointer;
+    border: none;    
+  }
+
+  div.requests-lines .tab-buttons button:hover {
+    filter: brightness(80%);
+    border-radius: 8px;
+  }
+  
+div.requests-lines .tab-buttons button.active {
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    border-radius: 8px;
+    border: 1px solid rgb(0, 0, 0);
+  }

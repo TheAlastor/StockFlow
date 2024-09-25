@@ -3,7 +3,7 @@ exports.up = function (knex) {
     table.increments('material_id').primary()
     table.integer('code').notNullable()
     table.string('quantity').notNullable()
-    table.bool('status').notNullable()
+    table.integer('status').notNullable()
 
     table.integer('reservation').notNullable()
     table.foreign('reservation').references('reservation').inTable('requests')

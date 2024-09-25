@@ -9,6 +9,7 @@ export default function Requests() {
   const [requests, setRequests] = useState([])
   const [users, setUsers] = useState([])
   const [materials, setMaterials] = useState([])
+  const [activeLineTab, setActiveLineTab] = useState()
   useEffect(() => {
     api.get('requests').then(response => {
       setRequests(response.data)
@@ -20,6 +21,24 @@ export default function Requests() {
       setUsers(response.data)
     })
   }, [])
+
+  function handleLineTabClick(tab, material_id, i) {
+    setActiveLineTab(tab)
+
+    const value = ''
+    const onchangeVal = [...materials]
+    if (i == 1) {
+      value = tab === 'Yes' ? 2 : 1
+      onchangeVal[material_id]['status'] = value
+      setMaterials(onchangeVal)
+    } else {
+      if (onchangeVal[material_id]['status'] == 2) {
+        value = tab === 'Yes' ? 3 : 1
+        onchangeVal[material_id]['status'] = value
+        setMaterials(onchangeVal)
+      }
+    }
+  }
 
   return (
     <div className="requests-page-container">
@@ -71,54 +90,83 @@ export default function Requests() {
                   <p className="colum6">Vinicius Garcia</p>
                 </summary>
                 <div className="request-details">
-                  {materials
-                    .filter(
-                      material => material.reservation === request.reservation
-                    )
-                    .map(material => (
-                      <div
-                        className="request-content"
-                        key={material.material_id}
-                      >
-                        <form>
-                          <h2>SAP Code</h2>
-                          <input
-                            placeholder="610000000"
-                            tabIndex="3"
-                            name="code"
-                            className="request-SAP"
-                            value={material.code}
-                            readOnly
-                          />
-                        </form>
+                  {request['materials'].map(material => (
+                    <div className="request-content" key={material.material_id}>
+                      <form>
+                        <h2>SAP Code</h2>
+                        <input
+                          placeholder="610000000"
+                          tabIndex="3"
+                          name="code"
+                          className="request-SAP"
+                          value={material.code}
+                          readOnly
+                        />
+                      </form>
 
-                        <form>
-                          <h2>Quantity</h2>
-                          <input
-                            placeholder="XX units"
-                            tabIndex="4"
-                            name="quantity"
-                            className="request-quantity"
-                            value={material.quantity}
-                            readOnly
-                          />
-                        </form>
-                        <form>
-                          <h2>Available for take out?</h2>
-                          <div className="tab-buttons">
-                            <button type="button">No</button>
-                            <button type="button">Yes</button>
-                          </div>
-                        </form>
-                        <form>
-                          <h2>Take out confirmed?</h2>
-                          <div className="tab-buttons">
-                            <button type="button">No</button>
-                            <button type="button">Yes</button>
-                          </div>
-                        </form>
-                      </div>
-                    ))}
+                      <form>
+                        <h2>Quantity</h2>
+                        <input
+                          placeholder="XX units"
+                          tabIndex="4"
+                          name="quantity"
+                          className="request-quantity"
+                          value={material.quantity}
+                          readOnly
+                        />
+                      </form>
+                      <form>
+                        <h2>Available for take out?</h2>
+                        <div className="tab-buttons">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleLineTabClick('No', material.material_id, 1)
+                            }
+                            className={material.status === 1 ? 'active' : ''}
+                          >
+                            No
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleLineTabClick('Yes', material.material_id, 1)
+                            }
+                            className={
+                              material.status === 2 || 3 ? 'active' : ''
+                            }
+                          >
+                            Yes
+                          </button>
+                        </div>
+                      </form>
+                      <form>
+                        <h2>Take out confirmed?</h2>
+                        <div className="tab-buttons">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleLineTabClick('No', material.material_id, 2)
+                            }
+                            className={
+                              material.status === 2 || 1 ? 'active' : ''
+                            }
+                          >
+                            No
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleLineTabClick('Yes', material.material_id, 2)
+                            }
+                            className={material.status === 3 ? 'active' : ''}
+                          >
+                            Yes
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  ))}
                   <div className="request-content2">
                     <div className="Comments">
                       <h2>Comments</h2>

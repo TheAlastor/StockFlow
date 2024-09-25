@@ -133,13 +133,13 @@ button:hover{ /*define o comportamento do elemento quando o mouse estiver sobre 
     width: 300px;      
 }
 
-.tab-buttons {
+div.request-colum2 .tab-buttons {
     display: flex;
     flex-direction: line;
     margin-bottom: 10px;
   }
   
-  .tab-buttons button {
+  div.request-container  .tab-buttons button {
     width: 50px;
     height: 45px;
     margin-right: 5px;
@@ -147,12 +147,12 @@ button:hover{ /*define o comportamento do elemento quando o mouse estiver sobre 
     border: none;    
   }
 
-  .tab-buttons button:hover {
+  div.request-container  .tab-buttons button:hover {
     filter: brightness(80%);
     border-radius: 8px;
   }
   
-  .tab-buttons button.active {
+  div.request-container .tab-buttons button.active {
     background-color: #ffffff;
     color: rgb(0, 0, 0);
     border-radius: 8px;

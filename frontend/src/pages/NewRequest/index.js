@@ -20,7 +20,7 @@ export default function NewRequest() {
     )
 
     //Executa a função para mapear o array e identificar o step final da reserva criada
-    const step = findStep(dataMaterialSend, 'status') === true ? '3' : '1'
+    const step = findStep(dataMaterialSend, 'status') === true ? 3 : 1
 
     const dataRequest = {
       reservation,
@@ -55,7 +55,7 @@ export default function NewRequest() {
   }
 
   function findStep(objectsArray, fieldName) {
-    return objectsArray.every(obj => obj[fieldName] === '2')
+    return objectsArray.every(obj => obj[fieldName] === 3)
   }
 
   const [reservation, setReservation] = useState()
@@ -74,7 +74,7 @@ export default function NewRequest() {
   }
 
   const [dataMaterial, setMaterialData] = useState([
-    { code: '', quantity: '', status: '0', reservation: '' }
+    { code: '', quantity: '', status: 1, reservation: '' }
   ])
 
   function lineChange(e, i) {
@@ -88,14 +88,14 @@ export default function NewRequest() {
   function handleLineTabClick(tab, i) {
     setActiveLineTab(tab)
     const name = 'status'
-    const value = tab === 'Yes' ? '2' : '0'
+    const value = tab === 'Yes' ? 3 : 1
     const onchangeVal = [...dataMaterial]
     onchangeVal[i][name] = value
     setMaterialData(onchangeVal)
   }
 
   function addLine() {
-    setMaterialData([...dataMaterial, { code: '', quantity: '', status: '0' }])
+    setMaterialData([...dataMaterial, { code: '', quantity: '', status: 1 }])
   }
 
   function deleteLine(i) {
@@ -206,14 +206,14 @@ export default function NewRequest() {
                     <button
                       type="button"
                       onClick={() => handleLineTabClick('No', i)}
-                      className={val.status === '0' ? 'active' : ''}
+                      className={val.status === 1 ? 'active' : ''}
                     >
                       No
                     </button>
                     <button
                       type="button"
                       onClick={() => handleLineTabClick('Yes', i)}
-                      className={val.status === '2' ? 'active' : ''}
+                      className={val.status === 3 ? 'active' : ''}
                     >
                       Yes
                     </button>
