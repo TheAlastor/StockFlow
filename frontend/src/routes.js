@@ -11,7 +11,7 @@ export default function AllRoutes() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/home" element={<Logon />} />
+        <Route path="/" element={<Logon />} />
         <Route path="/register" element={<Register />} />
         <Route path="/menu" element={<Menu />} />
         <Route path="/requests" element={<Requests />} />

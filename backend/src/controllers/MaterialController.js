@@ -11,11 +11,27 @@ module.exports = {
 
     await connection('materials').insert(dataMaterial)
     return response.json({ dataMaterial })
-  }
-}
+  },
 
-/*code,
-      quantity,
-      available,
-      delivered,
-      request_id */
+  async put(request, response) {
+    const materialsUpdated = Object.values(request.body);
+    
+    for (const material of materialsUpdated) {
+      await connection('materials')
+        .where('material_id', material.material_id)
+        .update({
+          status: material.status,
+        });
+    }
+
+      return response.json({ message: 'Materials updated successfully' });
+    },   
+    
+
+    
+  }
+
+
+
+
+

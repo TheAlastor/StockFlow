@@ -5,8 +5,8 @@ const UserController = require('./controllers/UserController')
 const RequestController = require('./controllers/RequestController')
 const MaterialController = require('./controllers/MaterialController')
 const ProfileController = require('./controllers/ProfileController')
-// const { request } = require('http')
-// const { response } = require('express')
+const EmailController = require('./controllers/EmailController')
+
 
 const routes = express.Router()
 
@@ -18,10 +18,13 @@ routes.get('/users', UserController.index)
 routes.post('/requests', RequestController.create)
 routes.get('/requests', RequestController.index)
 
+routes.put('/materials', MaterialController.put)
 routes.post('/materials', MaterialController.create)
 routes.get('/materials', MaterialController.index)
 
 routes.get('/profile', ProfileController.index)
+
+routes.post('/email', EmailController.send)
 
 function checkToken(request, response, next) {
   const authHeader = request.headers['authorization']

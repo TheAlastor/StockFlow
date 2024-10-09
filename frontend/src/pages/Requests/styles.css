@@ -250,12 +250,12 @@ div.requests-lines .tab-buttons button {
     border: none;    
   }
 
-  div.requests-lines .tab-buttons button:hover {
+  div.request-content .tab-buttons button:hover {
     filter: brightness(80%);
     border-radius: 8px;
   }
   
-div.requests-lines .tab-buttons button.active {
+div.request-content .tab-buttons button.active {
     background-color: #ffffff;
     color: rgb(0, 0, 0);
     border-radius: 8px;

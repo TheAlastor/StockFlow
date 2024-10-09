@@ -24,7 +24,7 @@ module.exports = {
       return response.status(422).json({ msg: 'Senha invalida' })
     }
 
-    const secret = 'AAAAAAAAAAAAA'
+    const secret = process.env.SECRET
     const sessionToken = jwt.sign({ id: userExist.user_id }, secret)
     const sessionId = userExist.user_id
     const name = userExist.name
