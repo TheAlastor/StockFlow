@@ -7,7 +7,6 @@ const MaterialController = require('./controllers/MaterialController')
 const ProfileController = require('./controllers/ProfileController')
 const EmailController = require('./controllers/EmailController')
 
-
 const routes = express.Router()
 
 routes.post('/session', SessionController.index)
@@ -17,10 +16,11 @@ routes.get('/users', UserController.index)
 
 routes.post('/requests', RequestController.create)
 routes.get('/requests', RequestController.index)
+routes.put('/requests', RequestController.put)
 
-routes.put('/materials', MaterialController.put)
 routes.post('/materials', MaterialController.create)
 routes.get('/materials', MaterialController.index)
+routes.put('/materials', MaterialController.put)
 
 routes.get('/profile', ProfileController.index)
 

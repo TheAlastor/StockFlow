@@ -30,7 +30,7 @@ module.exports = {
 
   async create(request, response) {
     //captura os dados para criação de solicitação
-    const { reservation, urgency, comments, step } = request.body
+    const { reservation, urgency, comments, step, date } = request.body
     console.log(request)
     const user_id = request.headers.authorization
 
@@ -39,9 +39,20 @@ module.exports = {
       urgency,
       comments,
       step,
-      user_id
+      user_id,
+      date
     })
 
     return response.json({ id })
+  },
+
+  async put(request, response) {
+    const { step, request_id } = request.body
+
+    await connection('requests').where('request_id', request_id).update({
+      step: step
+    })
+
+    return response.json({ message: 'Request updated successfully' })
   }
 }

@@ -3,6 +3,7 @@ import { FiLogIn } from 'react-icons/fi'
 import { Link, useNavigate } from 'react-router-dom'
 import React, { useState } from 'react'
 import api from '../../services/api'
+import Navbar from '../../Navbar'
 
 export default function Logon() {
   const navigate = useNavigate()
@@ -42,22 +43,7 @@ export default function Logon() {
 
   return (
     <div className="logon-page-container">
-      <form className="header-container">
-        <div className="home">
-          <Link to="http://localhost:3000/">StockFlow</Link>
-        </div>
-
-        <div className="navigation">
-          <Link to="http://localhost:3000/NewRequest">New Requests</Link>
-          <Link to="http://localhost:3000/MyRequests">My Requests</Link>
-          <Link to="http://localhost:3000/AllRequests">All Requests</Link>
-        </div>
-
-        <div className="profile">
-          <Link to="http://localhost:3000/Account">Account Settings</Link>
-        </div>
-      </form>
-
+      <Navbar />
       <div className="logon-container">
         <section className="form-login">
           <form>

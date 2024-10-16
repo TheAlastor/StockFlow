@@ -3,6 +3,7 @@ import './styles.css'
 import { FiLogIn } from 'react-icons/fi'
 import { Link, useNavigate } from 'react-router-dom'
 import api from '../../services/api'
+import Navbar from '../../Navbar'
 
 export default function NewRequest() {
   const userName = sessionStorage.getItem('name')
@@ -21,12 +22,14 @@ export default function NewRequest() {
 
     //Executa a função para mapear o array e identificar o step final da reserva criada
     const step = findStep(dataMaterialSend, 'status') === true ? 3 : 1
+    const date = new Date().toISOString().slice(0, 10)
 
     const dataRequest = {
       reservation,
       urgency,
       comments,
-      step
+      step,
+      date
     }
 
     try {
@@ -47,15 +50,15 @@ export default function NewRequest() {
     }
   }
 
-  function addReservation(objectsArray, fieldName, valueToAdd) {
-    return objectsArray.map(obj => {
-      obj[fieldName] = valueToAdd
+  function addReservation(dataMaterial, reservation, id) {
+    return dataMaterial.map(obj => {
+      obj[reservation] = id
       return obj
     })
   }
 
-  function findStep(objectsArray, fieldName) {
-    return objectsArray.every(obj => obj[fieldName] === 3)
+  function findStep(dataMaterial, status) {
+    return dataMaterial.every(obj => obj[status] === 3)
   }
 
   const [reservation, setReservation] = useState()
@@ -106,21 +109,7 @@ export default function NewRequest() {
 
   return (
     <div className="request-page-container">
-      <form className="header-container">
-        <div className="home">
-          <Link to="http://localhost:3000/Menu">StockFlow</Link>
-        </div>
-
-        <div className="navigation">
-          <Link to="http://localhost:3000/Request">New Requests</Link>
-          <Link to="http://localhost:3000/MyRequests">My Requests</Link>
-          <Link to="http://localhost:3000/AllRequests">All Requests</Link>
-        </div>
-
-        <div className="profile">
-          <Link to="http://localhost:3000/Account">Account Settings</Link>
-        </div>
-      </form>
+      <Navbar />
 
       <div className="request-container">
         <h1>StockFlow</h1>

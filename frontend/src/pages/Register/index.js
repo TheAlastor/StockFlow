@@ -4,6 +4,7 @@ import { FiLogIn } from 'react-icons/fi'
 import { Link, useNavigate } from 'react-router-dom'
 import userImage from '../../../src/user.png'
 import api from '../../services/api'
+import Navbar from '../../Navbar'
 
 export default function Register() {
   const navigate = useNavigate()
@@ -26,7 +27,7 @@ export default function Register() {
         const response = await api.post('users', dataUser)
 
         alert(`User created successfully. User ID: ${response.data.user_id}`)
-        navigate('/home')
+        navigate('/login')
       } catch (err) {
         alert('Error: ' + err.response.data.msg)
       }
@@ -93,21 +94,7 @@ export default function Register() {
 
   return (
     <div className="register-page-container">
-      <form className="header-container">
-        <div className="home">
-          <Link to="http://localhost:3000/">StockFlow</Link>
-        </div>
-
-        <div className="navigation">
-          <Link to="http://localhost:3000/Request">New Requests</Link>
-          <Link to="http://localhost:3000/MyRequests">My Requests</Link>
-          <Link to="http://localhost:3000/AllRequests">All Requests</Link>
-        </div>
-
-        <div className="profile">
-          <Link to="http://localhost:3000/Account">Account Settings</Link>
-        </div>
-      </form>
+      <Navbar />
 
       <div className="register-container">
         <h1>StockFlow </h1>

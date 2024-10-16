@@ -4,7 +4,8 @@ exports.up = function (knex) {
     table.integer('reservation').primary()
     table.bool('urgency').notNullable()
     table.string('comments').notNullable()
-    table.decimal('step').notNullable()
+    table.integer('step').notNullable()
+    table.date('date')
 
     table.string('user_id').notNullable()
     table.foreign('user_id').references('user_id').inTable('users')

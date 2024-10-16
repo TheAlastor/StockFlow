@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import '../Requests/styles.css'
+import '../MyRequests/styles.css'
 import { FiLogIn } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
 import userImage from '../../../src/user.png'
@@ -10,6 +10,7 @@ export default function Requests() {
   const [requests, setRequests] = useState([])
   const [users, setUsers] = useState([])
   const [materials, setMaterials] = useState([])
+  const userID = sessionStorage.getItem('id')
   const [refresh, setRefresh] = useState(false)
 
   useEffect(() => {
@@ -68,8 +69,8 @@ export default function Requests() {
     materials.forEach(material => {
       if (material.reservation === reservation) {
         materialsUpdated[material.material_id] = material
-        if (operation === 'confirmed') {
-          materialsUpdated[material.material_id].status = 4
+        if (operation === 'canceled') {
+          materialsUpdated[material.material_id].status = 5
         }
       }
     })
@@ -166,7 +167,7 @@ export default function Requests() {
     return htmlContent
   }
 
-  function buildRequestConfirmedEmail(materialsUpdated, request) {
+  function buildRequestCanceledEmail(materialsUpdated, request) {
     let htmlContent = `
     <html>
       <head>
@@ -189,7 +190,7 @@ export default function Requests() {
       </head>
       <body>
         <h1>StockFlow</h1>        
-        <h2>The request RQ-23-00${request.request_id} was confirmed.</h2>
+        <h2>The request RQ-23-00${request.request_id} was cancelled.</h2>
         <p>Check below the material list:</p>        
         <table>
           <thead>
@@ -216,6 +217,9 @@ export default function Requests() {
           break
         case 4:
           statusText = 'Withdrawal confirmed - Request concluded'
+          break
+        case 5:
+          statusText = 'Request canceled'
           break
         default:
           statusText = 'Unknown status'
@@ -272,22 +276,24 @@ export default function Requests() {
     }
   }
 
-  async function handleConfirmButtonClick(request) {
+  async function handleCanceledButtonClick(request) {
     try {
       const materialsUpdated = findMaterialsUpdated(
         request.reservation,
-        'confirmed'
+        'canceled'
       )
       const user = findUser(request.user_id)
 
-      const response = await api.put('materials', materialsUpdated)
+      request.step = 5
+      await api.put('materials', materialsUpdated)
+      await api.put('requests', request)
 
-      const html = buildRequestConfirmedEmail(materialsUpdated, request)
+      const html = buildRequestCanceledEmail(materialsUpdated, request)
 
       const mail = {
         to: `vinicius.ggarcia@hotmail.com`, //`{user.f_mail};{seniorstoreman.csp@modec.com}`,
-        subject: `Request Finished - Reservation: ${request.reservation}`,
-        text: `Confirmed`,
+        subject: `Request Canceled - Reservation: ${request.reservation}`,
+        text: `Canceled`,
         html: html
       }
 
@@ -321,143 +327,149 @@ export default function Requests() {
           </div>
 
           <div className="requests-lines">
-            {requests.map(request => (
-              <details key={request.request_id} className="details">
-                <summary>
-                  <p className="colum1">REQ-23-00{request.request_id}</p>
-                  <p className="colum2">{request.reservation}</p>
-                  <p className="colum3">
-                    {request.urgency === 0 ? 'Low' : 'High'}
-                  </p>
-                  <p className="colum4">STEP {request.step}</p>
-                  <p className="colum5">{formatDate(request.date)} </p>
-                  <div className="userImage">
-                    <img src={userImage} className="circular-image" />
-                  </div>
-                  <p className="colum6">
-                    {findUser(request.user_id)
-                      ? findUser(request.user_id).name
-                      : 'NOT FOUND'}
-                  </p>
-                </summary>
-                <div className="request-details">
-                  {materials
-                    .filter(
-                      material => material.reservation === request.reservation
-                    )
-                    .map((material, j) => (
-                      <div
-                        className="request-content"
-                        key={material.material_id}
-                      >
-                        <form>
-                          <h2>SAP Code</h2>
-                          <input
-                            placeholder="610000000"
-                            tabIndex="3"
-                            name="code"
-                            className="request-SAP"
-                            value={material.code}
-                            readOnly
-                          />
-                        </form>
+            {requests
+              .filter(request => request.user_id === userID)
+              .map(request => (
+                <details key={request.request_id} className="details">
+                  <summary>
+                    <p className="colum1">REQ-23-00{request.request_id}</p>
+                    <p className="colum2">{request.reservation}</p>
+                    <p className="colum3">
+                      {request.urgency === 0 ? 'Low' : 'High'}
+                    </p>
+                    <p className="colum4">STEP {request.step}</p>
+                    <p className="colum5">{formatDate(request.date)}</p>
+                    <div className="userImage">
+                      <img src={userImage} className="circular-image" />
+                    </div>
+                    <p className="colum6">
+                      {findUser(request.user_id)
+                        ? findUser(request.user_id).name
+                        : 'NOT FOUND'}
+                    </p>
+                  </summary>
+                  <div className="request-details">
+                    {materials
+                      .filter(
+                        material => material.reservation === request.reservation
+                      )
+                      .map((material, j) => (
+                        <div
+                          className="request-content"
+                          key={material.material_id}
+                        >
+                          <form>
+                            <h2>SAP Code</h2>
+                            <input
+                              placeholder="610000000"
+                              tabIndex="3"
+                              name="code"
+                              className="request-SAP"
+                              value={material.code}
+                              readOnly
+                            />
+                          </form>
 
-                        <form>
-                          <h2>Quantity</h2>
-                          <input
-                            placeholder="XX units"
-                            tabIndex="4"
-                            name="quantity"
-                            className="request-quantity"
-                            value={material.quantity}
-                            readOnly
-                          />
-                        </form>
-                        <form>
-                          <h2>Available for take out?</h2>
-                          <div className="tab-buttons">
-                            <button
-                              type="button"
-                              onClick={() =>
-                                handleLineTabClick(material.material_id, 1)
-                              }
-                              className={material.status === 1 ? 'active' : ''}
-                            >
-                              No
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() =>
-                                handleLineTabClick(material.material_id, 2)
-                              }
-                              className={
-                                material.status === 2 || material.status === 3
-                                  ? 'active'
-                                  : ''
-                              }
-                            >
-                              Yes
-                            </button>
-                          </div>
-                        </form>
-                        <form>
-                          <h2>Take out confirmed?</h2>
-                          <div className="tab-buttons">
-                            <button
-                              type="button"
-                              onClick={() =>
-                                handleLineTabClick(material.material_id, 0)
-                              }
-                              className={
-                                material.status === 2 || material.status === 1
-                                  ? 'active'
-                                  : ''
-                              }
-                            >
-                              No
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() =>
-                                handleLineTabClick(material.material_id, 3)
-                              }
-                              className={material.status === 3 ? 'active' : ''}
-                            >
-                              Yes
-                            </button>
-                          </div>
-                        </form>
+                          <form>
+                            <h2>Quantity</h2>
+                            <input
+                              placeholder="XX units"
+                              tabIndex="4"
+                              name="quantity"
+                              className="request-quantity"
+                              value={material.quantity}
+                              readOnly
+                            />
+                          </form>
+                          <form>
+                            <h2>Available for take out?</h2>
+                            <div className="tab-buttons">
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleLineTabClick(material.material_id, 1)
+                                }
+                                className={
+                                  material.status === 1 ? 'active' : ''
+                                }
+                              >
+                                No
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleLineTabClick(material.material_id, 2)
+                                }
+                                className={
+                                  material.status === 2 || material.status === 3
+                                    ? 'active'
+                                    : ''
+                                }
+                              >
+                                Yes
+                              </button>
+                            </div>
+                          </form>
+                          <form>
+                            <h2>Take out confirmed?</h2>
+                            <div className="tab-buttons">
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleLineTabClick(material.material_id, 0)
+                                }
+                                className={
+                                  material.status === 2 || material.status === 1
+                                    ? 'active'
+                                    : ''
+                                }
+                              >
+                                No
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleLineTabClick(material.material_id, 3)
+                                }
+                                className={
+                                  material.status === 3 ? 'active' : ''
+                                }
+                              >
+                                Yes
+                              </button>
+                            </div>
+                          </form>
+                        </div>
+                      ))}
+                    <div className="request-content2">
+                      <div className="Comments">
+                        <h2>Comments</h2>
+                        <input
+                          placeholder="Comments"
+                          maxLength={150}
+                          tabIndex="2"
+                          className="request-comments"
+                          value={request.comments}
+                        />
                       </div>
-                    ))}
-                  <div className="request-content2">
-                    <div className="Comments">
-                      <h2>Comments</h2>
-                      <input
-                        placeholder="Comments"
-                        maxLength={150}
-                        tabIndex="2"
-                        className="request-comments"
-                        value={request.comments}
-                      />
-                    </div>
-                    <div className="Buttons">
-                      <button
-                        className="Update-notify"
-                        onClick={() => handleNotifyButtonClick(request)}
-                      >
-                        Update and Notify
-                      </button>
-                      <button
-                        className="Confirm-reservation"
-                        onClick={() => handleConfirmButtonClick(request)}
-                      >
-                        Confirm Reservation
-                      </button>
+                      <div className="Buttons">
+                        <button
+                          className="Update-notify"
+                          onClick={() => handleNotifyButtonClick(request)}
+                        >
+                          Update and Notify
+                        </button>
+                        <button
+                          className="Cancel-reservation"
+                          onClick={() => handleCanceledButtonClick(request)}
+                        >
+                          Cancel Reservation
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </details>
-            ))}
+                </details>
+              ))}
           </div>
         </div>
       </div>

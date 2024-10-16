@@ -14,24 +14,16 @@ module.exports = {
   },
 
   async put(request, response) {
-    const materialsUpdated = Object.values(request.body);
-    
+    const materialsUpdated = Object.values(request.body)
+
     for (const material of materialsUpdated) {
       await connection('materials')
         .where('material_id', material.material_id)
         .update({
-          status: material.status,
-        });
+          status: material.status
+        })
     }
 
-      return response.json({ message: 'Materials updated successfully' });
-    },   
-    
-
-    
+    return response.json({ message: 'Materials updated successfully' })
   }
-
-
-
-
-
+}

@@ -16,7 +16,6 @@ app.use(
 app.use(express.json())
 app.use(routes)
 
-
 /* 
 GET:  buscar/listar info do back end
 POST: Cria informação no backend
