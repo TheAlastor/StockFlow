@@ -4,7 +4,7 @@
     display: flex;
     flex-direction: column;
     font: 400 15px Roboto, sans-serif;
-    margin-bottom: 60px;
+    margin-bottom: 60px;    
 }
 
 
@@ -24,18 +24,44 @@
 
 }
 
-div .request-details input{
-    pointer-events: none;
-      cursor: none;
-    }
+div.requests-page-top {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  div.requests-page-description {
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0;
+    font-weight: bold;
+    margin-left: 10px;
+    font-size: 20px;
+  }
+  
+  div.requests-filter {
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px;
+    border: 2px solid black;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    max-width: 130px;
+    margin: 0;
+    font-weight: bold;
+    gap: 10px;  
+  }
+  
 
-.requests-container h1 {
-    margin-bottom: 20px;
+.requests-container h1 {    
     color: rgb(0, 0, 0);
     font: 400 70px Roboto, sans-serif;
-    text-align: center;
-    margin-bottom: 60px;
-
+    text-align: center;    
+    margin-bottom:50px;
 }
 
 div.requests-header {
@@ -55,27 +81,28 @@ div.requests-header h2 {
 
 
 div.requests-header h2.colum2{       
-    margin-left: 80px; 
+    margin-left: 85px; 
 }
 
 div.requests-header h2.colum3{  
-    margin-left: 80px; 
+    margin-left: 85px; 
 }
 
 div.requests-header h2.colum4{
-    margin-left: 100px; 
+    margin-left: 98px; 
 }
 
 div.requests-header h2.colum5{   
-    margin-left: 150px; 
+    margin-left: 140px; 
 }
 
 div.requests-header div.colum6 {         
-    display: flex;
-    flex: 1;
+    display: flex;   
     justify-content: center;
     align-items: center;
     margin-left: 60px;
+    width: 365px;
+    height: 40px;
  }
 
 details{

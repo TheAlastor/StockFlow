@@ -11,10 +11,10 @@ export default function NewRequest() {
   const navigate = useNavigate()
 
   const [reservation, setReservation] = useState()
-  function inputReservation(e) {    
+  function inputReservation(e) {
     const value = e.target.value
-    if (/^\d*$/.test(value)) {     
-    setReservation(value)
+    if (/^\d*$/.test(value)) {
+      setReservation(value)
     }
   }
 
@@ -31,7 +31,6 @@ export default function NewRequest() {
   const [dataMaterial, setMaterialData] = useState([
     { code: '', quantity: '', status: 1, request_id: 0 }
   ])
-  
 
   function quantityChange(e, i) {
     const { name, value } = e.target
@@ -42,7 +41,7 @@ export default function NewRequest() {
 
   function codeChange(e, i) {
     const { name, value } = e.target
-    if (/^\d*$/.test(value)) {      
+    if (/^\d*$/.test(value)) {
       const onchangeVal = [...dataMaterial]
       onchangeVal[i][name] = value
       setMaterialData(onchangeVal)
@@ -69,7 +68,6 @@ export default function NewRequest() {
     setMaterialData(deleteVal)
   }
 
-
   function addRequestID(dataMaterial, parameter, id) {
     return dataMaterial.map(obj => {
       obj[parameter] = id
@@ -82,33 +80,34 @@ export default function NewRequest() {
   }
 
   function checkInput() {
-    
     if (!reservation || reservation.length < 7) {
-      alert('Reservation number must be at least 7 characters long.');
-      return; 
+      alert('Reservation number must be at least 7 characters long.')
+      return
     }
 
-    const allQuantityValid = dataMaterial.every(item => item.quantity.length >= 3); 
+    const allQuantityValid = dataMaterial.every(
+      item => item.quantity.length >= 3
+    )
+
+    const allCodesValid = dataMaterial.every(item => item.code.length >= 12)
+
+    if (!allCodesValid) {
+      alert('SAP Code must be at least 12 characters long.')
+      return
+    }
 
     if (!allQuantityValid) {
-      alert('Every material must have at least a quantity specified');
-      return; 
+      alert('Every material must have at least a quantity specified')
+      return
     }
 
-    const allCodesValid = dataMaterial.every(item => item.code.length >= 12); 
-  
-    if (!allCodesValid) {
-      alert('SAP Code must be at least 12 characters long.');
-      return; 
-    }
-
-    return true;
+    return true
   }
 
   async function handleRegister(e) {
     e.preventDefault()
 
-    if (!checkInput()) return;
+    if (!checkInput()) return
     //Executa a função para mapear o array e identificar o step final da reserva criada
     const step = findStep(dataMaterial, 'status') === true ? 3 : 1
     const date = new Date().toISOString().slice(0, 10)
@@ -129,23 +128,25 @@ export default function NewRequest() {
       })
 
       //Adiciona o ID da requisição à todos os materiais que serão criados com a reserva
-    const dataMaterialSend = addRequestID(
-      dataMaterial,
-      'request_id',
-      response.data.request_id
-    )
+      const dataMaterialSend = addRequestID(
+        dataMaterial,
+        'request_id',
+        response.data.request_id
+      )
 
       await api.post('materials', dataMaterialSend)
 
       alert(
-        `Solicitação criada. Identificação da Solicitação: ${response.data.request_id}`
+        `Request RQ-23-${String(response.data.request_id).padStart(
+          5,
+          '0'
+        )} created successfully`
       )
       navigate('/Menu')
     } catch (err) {
-      alert('Erro na Solicitação: ' + err.response.data.msg)
+      alert('Error: ' + err.response.data.msg)
     }
   }
-
 
   return (
     <div className="request-page-container">
@@ -167,7 +168,7 @@ export default function NewRequest() {
               <h2>Reservation Number</h2>
               <input
                 placeholder="XXXXXXX"
-                maxLength={7}                
+                maxLength={7}
                 tabIndex="1"
                 className="request-reservation"
                 onChange={e => inputReservation(e)}
@@ -209,7 +210,7 @@ export default function NewRequest() {
                   <h2>SAP Code</h2>
                   <input
                     placeholder="610000000"
-                    maxLength={12}                    
+                    maxLength={12}
                     tabIndex="3"
                     name="code"
                     value={val.code}

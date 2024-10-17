@@ -1,14 +1,15 @@
-.requests-page-container {
+
+.myrequests-page-container {
     justify-content: space-between;
     align-items: center;
     display: flex;
     flex-direction: column;
     font: 400 15px Roboto, sans-serif;
-    margin-bottom: 60px;
+    margin-bottom: 60px;   
 }
 
 
-.requests-container {
+.myrequests-container {
     width: fit-content;
     background: rgb(245, 242, 243);
     box-shadow: 0 0 100px rgba(0, 0, 0, 0.1);
@@ -24,12 +25,40 @@
 
 }
 
-div .request-details input{
-    pointer-events: none;
-      cursor: none;
-    }
+div.myrequests-page-top {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  div.myrequests-page-description {
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0;
+    font-weight: bold;
+    margin-left: 10px;
+    font-size: 20px;
+  }
+  
+  div.myrequests-filter {
+    flex-grow: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px;
+    border: 2px solid black;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    max-width: 130px;
+    margin: 0;
+    font-weight: bold;
+    gap: 10px;  
+  }
 
-.requests-container h1 {
+
+.myrequests-container h1 {
     margin-bottom: 20px;
     color: rgb(0, 0, 0);
     font: 400 70px Roboto, sans-serif;
@@ -38,7 +67,7 @@ div .request-details input{
 
 }
 
-div.requests-header {
+div.myrequests-header {
     display: flex;
     flex-direction: line;
     justify-content: left;
@@ -47,35 +76,36 @@ div.requests-header {
     
 }
 
-div.requests-header h2 {
+div.myrequests-header h2 {
     margin-bottom: 10px;
     color: rgb(0, 0, 0);
     font: 400 25px Roboto, sans-serif;        
 }
 
 
-div.requests-header h2.colum2{       
-    margin-left: 80px; 
+div.myrequests-header h2.colum2{       
+    margin-left: 85px; 
 }
 
-div.requests-header h2.colum3{  
-    margin-left: 80px; 
+div.myrequests-header h2.colum3{  
+    margin-left: 85px; 
 }
 
-div.requests-header h2.colum4{
-    margin-left: 100px; 
+div.myrequests-header h2.colum4{
+    margin-left: 98px; 
 }
 
-div.requests-header h2.colum5{   
-    margin-left: 150px; 
+div.myrequests-header h2.colum5{   
+    margin-left: 140px; 
 }
 
-div.requests-header div.colum6 {         
-    display: flex;
-    flex: 1;
+div.myrequests-header div.colum6 {         
+    display: flex;   
     justify-content: center;
     align-items: center;
     margin-left: 60px;
+    width: 365px;
+    height: 40px;
  }
 
 details{
@@ -141,7 +171,7 @@ summary .colum6 {
     margin-left: 5px;      
   }
 
-div.request-details{
+div.myrequests-details{
     display: flex;    
     flex-direction: column;
     margin-top: 10px;  
@@ -155,7 +185,7 @@ div.request-details{
     box-shadow: 4px 4px 3px rgba(0, 0, 0, 0.15); 
 }
 
-.request-content {   
+.myrequests-content {   
     display: flex;    
     flex-direction: line;
     align-items: center;     
@@ -165,11 +195,11 @@ div.request-details{
     margin-right: 20px; 
 }
 
-div.request-content form{   
+div.myrequests-content form{   
     margin-left: 20px;
 }
 
-.request-content div.colum1{   
+.myrequests-content div.colum1{   
     display: flex;    
     flex-direction: column;
     align-items: center;  
@@ -184,7 +214,7 @@ div.request-content form{
     box-shadow: 4px 4px 3px rgba(0, 0, 0, 0.15);  
 }
 
-.request-content2 {      
+.myrequests-content2 {      
     display: flex;    
     flex-direction: line;
     align-items: center;     
@@ -193,7 +223,7 @@ div.request-content form{
     margin-right: 20px; 
 }
 
-div.request-comments
+div.myrequests-comments
   {
     width: 500px;   
     border-radius: 8px;       
@@ -242,7 +272,7 @@ button.Cancel-reservation{
     
 }
 
-div.requests-lines .tab-buttons button {
+div.myrequests-lines .tab-buttons button {
     width: 50px;
     height: 45px;
     margin-right: 5px;
@@ -250,14 +280,28 @@ div.requests-lines .tab-buttons button {
     border: none;    
   }
 
-  div.request-content .tab-buttons button:hover {
+  div.myrequests-content .tab-buttons button:hover {
     filter: brightness(80%);
     border-radius: 8px;
   }
   
-div.request-content .tab-buttons button.active {
+div.myrequests-content .tab-buttons button.active {
     background-color: #ffffff;
     color: rgb(0, 0, 0);
     border-radius: 8px;
     border: 1px solid rgb(0, 0, 0);
   }
+
+  .myrequest-comments
+  {
+    margin-bottom: 15px;
+    width: 500px;   
+    border-radius: 8px;   
+    margin-bottom: 16px;
+    height: 100px;
+    display: flex;
+    text-indent: 15px;
+    color: black;
+    border: 1px solid white;
+    font: 400 18px Robot, sans-serif;
+}

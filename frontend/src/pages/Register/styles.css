@@ -31,6 +31,10 @@ h1 {
     text-align: center;
 }
 
+div.user-name h3 {      
+    font: 600 15px Roboto, sans-serif;      
+}
+
 .register-container section.form-register {  
     width: 100%; 
     display: flex;

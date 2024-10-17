@@ -6,9 +6,7 @@ function Navbar() {
 
   const handleLogout = () => {
     sessionStorage.clear()
-    navigate('/Login') // Navigate to the Login page after logout
   }
-
 
   return (
     <form className="header-container">
@@ -23,7 +21,7 @@ function Navbar() {
       </div>
 
       <div className="profile">
-        <Link onClick={handleLogout}>
+        <Link to="/Login" onClick={handleLogout}>
           Log Out
         </Link>
       </div>

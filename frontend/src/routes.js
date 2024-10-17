@@ -7,6 +7,7 @@ import Menu from './pages/Menu'
 import NewRequest from './pages/NewRequest'
 import Requests from './pages/Requests'
 import MyRequests from './pages/MyRequests'
+import Recover from './pages/Recover'
 import CheckLogin from './CheckLogin'
 
 export default function AllRoutes() {
@@ -15,6 +16,7 @@ export default function AllRoutes() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/login/Register" element={<Register />} />
+        <Route path="/login/recover" element={<Recover />} />
         <Route element={<CheckLogin />}>
           <Route path="/menu" element={<Menu />} />
           <Route path="/newRequest" element={<NewRequest />} />

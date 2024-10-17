@@ -15,7 +15,7 @@ module.exports = {
     const userExist = await connection('users').where({ p_mail }).first()
     if (userExist) {
       return response.status(422).json({
-        msg: 'Personal e-mail already bebing used by other user.'
+        msg: 'Personal e-mail already being used by other user.'
       })
     }
 
@@ -38,9 +38,7 @@ module.exports = {
   },
 
   async update(request, response) {
-    //assistir a aula para saber como atualizar a partir do frontend
     const userExists = sessionStorage.getItem('ID')
-
     return response.json({ userExists })
   }
 }

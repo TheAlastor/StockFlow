@@ -12,6 +12,7 @@ export default function Requests() {
   const [materials, setMaterials] = useState([])
   const userID = sessionStorage.getItem('id')
   const [refresh, setRefresh] = useState(false)
+  const [filterCompleted, setFilterCompleted] = useState(false)
 
   useEffect(() => {
     api.get('requests').then(response => {
@@ -24,6 +25,11 @@ export default function Requests() {
       setUsers(response.data)
     })
   }, [refresh])
+
+  function toggleFilterCompleted() {
+    setFilterCompleted(prevState => !prevState) // Toggle the state
+    setRefresh(prev => !prev)
+  }
 
   function handleLineTabClick(material_id, step) {
     const value = step
@@ -94,6 +100,44 @@ export default function Requests() {
     return null
   }
 
+  function checkAction(user, request, action) {
+    if (request.step === 4) {
+      alert(
+        `Error: RQ-23-${String(request.request_id).padStart(
+          5,
+          '0'
+        )} was already Confirmed`
+      )
+      return
+    }
+
+    if (request.step === 5) {
+      alert(
+        `Error: RQ-23-${String(request.request_id).padStart(
+          5,
+          '0'
+        )} was already Canceled`
+      )
+      return
+    }
+
+    if (user.role === 0 && action === 'confirm') {
+      alert(`Error: User has no permission to execute this action`)
+      return
+    }
+
+    if (user.role === 0 && user.user_id !== request.user_id) {
+      alert(
+        `Error: User is not owner of RQ-23-${String(
+          request.request_id
+        ).padStart(5, '0')}`
+      )
+      return
+    }
+
+    return true
+  }
+
   function buildMaterialUpdateEmail(materialsUpdated, request) {
     let htmlContent = `
     <html>
@@ -117,7 +161,10 @@ export default function Requests() {
       </head>
       <body>
         <h1>StockFlow</h1>        
-        <h2>The request RQ-23-00${request.request_id} was updated.</h2>
+        <h2>The request RQ-23-${String(request.request_id).padStart(
+          5,
+          '0'
+        )} was updated.</h2>
         <p>Check below the material list and status updated:</p>        
         <table>
           <thead>
@@ -190,7 +237,10 @@ export default function Requests() {
       </head>
       <body>
         <h1>StockFlow</h1>        
-        <h2>The request RQ-23-00${request.request_id} was cancelled.</h2>
+        <h2>The request RQ-23-${String(request.request_id).padStart(
+          5,
+          '0'
+        )} was canceled.</h2>
         <p>Check below the material list:</p>        
         <table>
           <thead>
@@ -236,7 +286,10 @@ export default function Requests() {
     htmlContent += `
           </tbody>
         </table>
-        <p>The responsible may now perform final confirmation on SAP operation</p>   
+        <p>The request RQ-23-${String(request.request_id).padStart(
+          5,
+          '0'
+        )} was canceled by its owner</p>   
       </body>
     </html>
   `
@@ -245,14 +298,14 @@ export default function Requests() {
   }
 
   async function handleNotifyButtonClick(request) {
+    const user = findUser(request.user_id)
+    if (!checkAction(user, request, 'confirm')) return
+
     try {
-
-
       const materialsUpdated = findMaterialsUpdated(
         request.request_id,
         'notify'
       )
-      const user = findUser(request.user_id)
 
       request.step = findRequestStep(materialsUpdated)
 
@@ -272,22 +325,29 @@ export default function Requests() {
 
       setRefresh(prev => !prev)
 
-      alert(`Success: Request RQ-23-00${request.user_id} confirmed`)
+      alert(
+        `Request RQ-23-${String(request.request_id).padStart(
+          5,
+          '0'
+        )} updated successfully`
+      )
     } catch (err) {
       alert('Error: ' + err)
     }
   }
 
   async function handleCanceledButtonClick(request) {
+    const user = findUser(request.user_id)
+    if (!checkAction(user, request, 'confirm')) return
+
     try {
       const materialsUpdated = findMaterialsUpdated(
         request.request_id,
         'canceled'
       )
-      const user = findUser(request.user_id)
 
       request.step = 5
-      
+
       await api.put('materials', materialsUpdated)
       await api.put('requests', request)
 
@@ -304,21 +364,41 @@ export default function Requests() {
 
       setRefresh(prev => !prev)
 
-      alert(`Success: Request RQ-23-00${request.request_id} updated`)
+      alert(
+        `Request RQ-23-${String(request.request_id).padStart(
+          5,
+          '0'
+        )} canceled successfully`
+      )
     } catch (err) {
       alert('Error: ' + err)
     }
   }
 
   return (
-    <div className="requests-page-container">
+    <div className="myrequests-page-container">
       <Navbar />
 
-      <div className="requests-container">
+      <div className="myrequests-container">
+        <div className="myrequests-page-top">
+          <div className="myrequests-page-description">
+            <p>My Requests</p>
+          </div>
+
+          <div className="myrequests-filter">
+            <input
+              type="checkbox"
+              checked={!filterCompleted}
+              onChange={toggleFilterCompleted}
+            ></input>
+            <p>Active Only</p>
+          </div>
+        </div>
+
         <h1>StockFlow</h1>
 
-        <div className="requests-colum1">
-          <div className="requests-header">
+        <div className="myrequests-colum1">
+          <div className="myrequests-header">
             <h2 className="colum1">Request Number</h2>
             <h2 className="colum2">Reservation</h2>
             <h2 className="colum3">Priority</h2>
@@ -329,13 +409,19 @@ export default function Requests() {
             </div>
           </div>
 
-          <div className="requests-lines">
+          <div className="myrequests-lines">
             {requests
               .filter(request => request.user_id === userID)
+              .filter(
+                request =>
+                  filterCompleted || (request.step !== 4 && request.step !== 5)
+              )
               .map(request => (
                 <details key={request.request_id} className="details">
                   <summary>
-                    <p className="colum1">REQ-23-00{request.request_id}</p>
+                    <p className="colum1">
+                      REQ-23-{String(request.request_id).padStart(5, '0')}
+                    </p>
                     <p className="colum2">{request.reservation}</p>
                     <p className="colum3">
                       {request.urgency === 0 ? 'Low' : 'High'}
@@ -444,14 +530,14 @@ export default function Requests() {
                           </form>
                         </div>
                       ))}
-                    <div className="request-content2">
+                    <div className="myrequests-content2">
                       <div className="Comments">
                         <h2>Comments</h2>
                         <input
                           placeholder="Comments"
                           maxLength={150}
                           tabIndex="2"
-                          className="request-comments"
+                          className="myrequest-comments"
                           value={request.comments}
                         />
                       </div>

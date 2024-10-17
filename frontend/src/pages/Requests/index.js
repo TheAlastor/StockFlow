@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import '../Requests/styles.css'
+import './styles.css'
 import { FiLogIn } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
 import userImage from '../../../src/user.png'
@@ -99,6 +99,44 @@ export default function Requests() {
     return null
   }
 
+  function checkAction(user, request, action) {
+    if (request.step === 4) {
+      alert(
+        `Error: RQ-23-${String(request.request_id).padStart(
+          5,
+          '0'
+        )} was already Confirmed`
+      )
+      return
+    }
+
+    if (request.step === 5) {
+      alert(
+        `Error: RQ-23-${String(request.request_id).padStart(
+          5,
+          '0'
+        )} was already Canceled`
+      )
+      return
+    }
+
+    if (user.role === 0 && action === 'confirm') {
+      alert(`Error: User has no permission to execute this action`)
+      return
+    }
+
+    if (user.role === 0 && user.user_id !== request.user_id) {
+      alert(
+        `Error: User is not owner of RQ-23-${String(
+          request.request_id
+        ).padStart(5, '0')}`
+      )
+      return
+    }
+
+    return true
+  }
+
   function buildMaterialUpdateEmail(materialsUpdated, request) {
     let htmlContent = `
     <html>
@@ -122,7 +160,10 @@ export default function Requests() {
       </head>
       <body>
         <h1>StockFlow</h1>        
-        <h2>The request RQ-23-00${request.request_id} was updated.</h2>
+        <h2>The request RQ-23-${String(request.request_id).padStart(
+          5,
+          '0'
+        )} was updated.</h2>
         <p>Check below the material list and status updated:</p>        
         <table>
           <thead>
@@ -195,7 +236,10 @@ export default function Requests() {
       </head>
       <body>
         <h1>StockFlow</h1>        
-        <h2>The request RQ-23-00${request.request_id} was confirmed.</h2>
+        <h2>The request RQ-23-${String(request.request_id).padStart(
+          5,
+          '0'
+        )} was confirmed.</h2>
         <p>Check below the material list:</p>        
         <table>
           <thead>
@@ -247,12 +291,14 @@ export default function Requests() {
   }
 
   async function handleNotifyButtonClick(request) {
+    const user = findUser(request.user_id)
+    if (!checkAction(user, request, 'notify')) return
+
     try {
       const materialsUpdated = findMaterialsUpdated(
         request.request_id,
         'notify'
       )
-      const user = findUser(request.user_id)
 
       request.step = findRequestStep(materialsUpdated)
 
@@ -272,19 +318,26 @@ export default function Requests() {
 
       setRefresh(prev => !prev)
 
-      alert(`Success: Request RQ-23-00${request.user_id} confirmed`)
+      alert(
+        `Request RQ-23-${String(request.request_id).padStart(
+          5,
+          '0'
+        )} updated successfully`
+      )
     } catch (err) {
       alert('Error: ' + err)
     }
   }
 
   async function handleConfirmButtonClick(request) {
+    const user = findUser(request.user_id)
+    if (!checkAction(user, request, 'confirm')) return
+
     try {
       const materialsUpdated = findMaterialsUpdated(
         request.request_id,
         'confirmed'
       )
-      const user = findUser(request.user_id)
 
       request.step = 4
 
@@ -297,7 +350,7 @@ export default function Requests() {
 
       const mail = {
         to: `vinicius.ggarcia@hotmail.com`, //`{user.f_mail};{seniorstoreman.csp@modec.com}`,
-        subject: `Request Finished - Reservation: ${request.reservation}`,
+        subject: `Request Confirmed - Reservation: ${request.reservation}`,
         text: `Confirmed`,
         html: html
       }
@@ -306,7 +359,12 @@ export default function Requests() {
 
       setRefresh(prev => !prev)
 
-      alert(`Success: Request RQ-23-00${request.request_id} updated`)
+      alert(
+        `Request RQ-23-${String(request.request_id).padStart(
+          5,
+          '0'
+        )} confirmed successfully`
+      )
     } catch (err) {
       alert('Error: ' + err)
     }
@@ -317,10 +375,23 @@ export default function Requests() {
       <Navbar />
 
       <div className="requests-container">
+        <div className="requests-page-top">
+          <div className="requests-page-description">
+            <p>All Requests</p>
+          </div>
+
+          <div className="requests-filter">
+            <input
+              type="checkbox"
+              checked={!filterCompleted}
+              onChange={toggleFilterCompleted}
+            ></input>
+            <p>Active Only</p>
+          </div>
+        </div>
+
         <h1>StockFlow</h1>
-        <button onClick={toggleFilterCompleted}>
-            {filterCompleted ? 'Show All Requests' : 'Hide Status 5 Requests'}
-          </button>
+
         <div className="requests-colum1">
           <div className="requests-header">
             <h2 className="colum1">Request Number</h2>
@@ -334,143 +405,154 @@ export default function Requests() {
           </div>
 
           <div className="requests-lines">
-            {requests.filter(request => !filterCompleted || (request.step === 4 || request.step !== 5)).map(request => (
-              <details key={request.request_id} className="details">
-                <summary>
-                  <p className="colum1">REQ-23-00{request.request_id}</p>
-                  <p className="colum2">{request.reservation}</p>
-                  <p className="colum3">
-                    {request.urgency === 0 ? 'Low' : 'High'}
-                  </p>
-                  <p className="colum4">STEP {request.step}</p>
-                  <p className="colum5">{formatDate(request.date)} </p>
-                  <div className="userImage">
-                    <img src={userImage} className="circular-image" />
-                  </div>
-                  <p className="colum6">
-                    {findUser(request.user_id)
-                      ? findUser(request.user_id).name
-                      : 'NOT FOUND'}
-                  </p>
-                </summary>
-                <div className="request-details">
-                  {materials
-                    .filter(
-                      material => material.request_id === request.request_id
-                    )
-                    .map((material, j) => (
-                      <div
-                        className="request-content"
-                        key={material.material_id}
-                      >
-                        <form>
-                          <h2>SAP Code</h2>
-                          <input
-                            placeholder="610000000"
-                            tabIndex="3"
-                            name="code"
-                            className="request-SAP"
-                            value={material.code}
-                            readOnly
-                          />
-                        </form>
+            {requests
+              .filter(
+                request =>
+                  filterCompleted || (request.step !== 4 && request.step !== 5)
+              )
+              .map(request => (
+                <details key={request.request_id} className="details">
+                  <summary>
+                    <p className="colum1">
+                      REQ-23-{String(request.request_id).padStart(5, '0')}
+                    </p>
+                    <p className="colum2">{request.reservation}</p>
+                    <p className="colum3">
+                      {request.urgency === 0 ? 'Low' : 'High'}
+                    </p>
+                    <p className="colum4">STEP {request.step}</p>
+                    <p className="colum5">{formatDate(request.date)} </p>
+                    <div className="userImage">
+                      <img src={userImage} className="circular-image" />
+                    </div>
+                    <p className="colum6">
+                      {findUser(request.user_id)
+                        ? findUser(request.user_id).name
+                        : 'NOT FOUND'}
+                    </p>
+                  </summary>
+                  <div className="request-details">
+                    {materials
+                      .filter(
+                        material => material.request_id === request.request_id
+                      )
+                      .map((material, j) => (
+                        <div
+                          className="request-content"
+                          key={material.material_id}
+                        >
+                          <form>
+                            <h2>SAP Code</h2>
+                            <input
+                              placeholder="610000000"
+                              tabIndex="3"
+                              name="code"
+                              className="request-SAP"
+                              value={material.code}
+                              readOnly
+                            />
+                          </form>
 
-                        <form>
-                          <h2>Quantity</h2>
-                          <input
-                            placeholder="XX units"
-                            tabIndex="4"
-                            name="quantity"
-                            className="request-quantity"
-                            value={material.quantity}
-                            readOnly
-                          />
-                        </form>
-                        <form>
-                          <h2>Available for Withdrawal?</h2>
-                          <div className="tab-buttons">
-                            <button
-                              type="button"
-                              onClick={() =>
-                                handleLineTabClick(material.material_id, 1)
-                              }
-                              className={material.status === 1 ? 'active' : ''}
-                            >
-                              No
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() =>
-                                handleLineTabClick(material.material_id, 2)
-                              }
-                              className={
-                                material.status === 2 || material.status === 3
-                                  ? 'active'
-                                  : ''
-                              }
-                            >
-                              Yes
-                            </button>
-                          </div>
-                        </form>
-                        <form>
-                          <h2>Withdrawal confirmed?</h2>
-                          <div className="tab-buttons">
-                            <button
-                              type="button"
-                              onClick={() =>
-                                handleLineTabClick(material.material_id, 0)
-                              }
-                              className={
-                                material.status === 2 || material.status === 1
-                                  ? 'active'
-                                  : ''
-                              }
-                            >
-                              No
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() =>
-                                handleLineTabClick(material.material_id, 3)
-                              }
-                              className={material.status === 3 ? 'active' : ''}
-                            >
-                              Yes
-                            </button>
-                          </div>
-                        </form>
+                          <form>
+                            <h2>Quantity</h2>
+                            <input
+                              placeholder="XX units"
+                              tabIndex="4"
+                              name="quantity"
+                              className="request-quantity"
+                              value={material.quantity}
+                              readOnly
+                            />
+                          </form>
+                          <form>
+                            <h2>Available for Withdrawal?</h2>
+                            <div className="tab-buttons">
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleLineTabClick(material.material_id, 1)
+                                }
+                                className={
+                                  material.status === 1 ? 'active' : ''
+                                }
+                              >
+                                No
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleLineTabClick(material.material_id, 2)
+                                }
+                                className={
+                                  material.status === 2 || material.status === 3
+                                    ? 'active'
+                                    : ''
+                                }
+                              >
+                                Yes
+                              </button>
+                            </div>
+                          </form>
+                          <form>
+                            <h2>Withdrawal confirmed?</h2>
+                            <div className="tab-buttons">
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleLineTabClick(material.material_id, 0)
+                                }
+                                className={
+                                  material.status === 2 || material.status === 1
+                                    ? 'active'
+                                    : ''
+                                }
+                              >
+                                No
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleLineTabClick(material.material_id, 3)
+                                }
+                                className={
+                                  material.status === 3 ? 'active' : ''
+                                }
+                              >
+                                Yes
+                              </button>
+                            </div>
+                          </form>
+                        </div>
+                      ))}
+                    <div className="request-content2">
+                      <div className="Comments">
+                        <h2>Comments</h2>
+                        <input
+                          placeholder="Comments"
+                          maxLength={150}
+                          tabIndex="2"
+                          className="request-comments"
+                          value={request.comments}
+                        />
                       </div>
-                    ))}
-                  <div className="request-content2">
-                    <div className="Comments">
-                      <h2>Comments</h2>
-                      <input
-                        placeholder="Comments"
-                        maxLength={150}
-                        tabIndex="2"
-                        className="request-comments"
-                        value={request.comments}
-                      />
-                    </div>
-                    <div className="Buttons">
-                      <button
-                        className="Update-notify"
-                        onClick={() => handleNotifyButtonClick(request)}
-                      >
-                        Update and Notify
-                      </button>
-                      <button
-                        className="Confirm-reservation"
-                        onClick={() => handleConfirmButtonClick(request)}
-                      >
-                        Confirm Reservation
-                      </button>
+                      <div className="Buttons">
+                        <button
+                          className="Update-notify"
+                          onClick={() => handleNotifyButtonClick(request)}
+                        >
+                          Update and Notify
+                        </button>
+                        <button
+                          className="Confirm-reservation"
+                          onClick={() => handleConfirmButtonClick(request)}
+                        >
+                          Confirm Reservation
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </details>
-            ))}
+                </details>
+              ))}
           </div>
         </div>
       </div>

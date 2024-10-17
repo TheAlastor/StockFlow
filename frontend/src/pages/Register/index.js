@@ -47,25 +47,35 @@ export default function Register() {
   /////////////// Change  Name of Profile Preview /////
   const [name, setName] = useState()
   function handleNameChange(e) {
-    setName(getFirstWord(e.target.value))
+    let value = getFirstWord(e.target.value)
+    const formattedValue =
+      value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()
+    setName(formattedValue)
   }
 
   ////////////////// Change Last Name of Profile Preview ////////
   const [lastName, setLastName] = useState()
   function handleLastNameChange(e) {
-    setLastName(getLastWord(e.target.value))
+    let value = getLastWord(e.target.value)
+    const formattedValue =
+      value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()
+    setLastName(formattedValue)
   }
 
   ////////////////// Change Last Name of Profile Preview ////////
   const [p_mail, setPersonalMail] = useState()
   function handlePersonalMailChange(e) {
-    setPersonalMail(e.target.value)
+    let value = e.target.value
+    const formattedValue = value.toLowerCase()
+    setPersonalMail(formattedValue)
   }
 
   ////////////////// Change Last Name of Profile Preview ////////
   const [f_mail, setFunctionMail] = useState()
   function handleFunctionMailChange(e) {
-    setFunctionMail(e.target.value)
+    let value = e.target.value
+    const formattedValue = value.toLowerCase()
+    setFunctionMail(formattedValue)
   }
 
   ////////////////// Change Last Name of Profile Preview ////////
@@ -131,6 +141,7 @@ export default function Register() {
                 placeholder="Last Name"
                 tabIndex="2"
                 onChange={handleLastNameChange}
+                maxLength={12}
               />
               <h2>Onboard Position E-mail</h2>
               <input

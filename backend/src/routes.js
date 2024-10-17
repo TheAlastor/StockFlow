@@ -9,7 +9,8 @@ const EmailController = require('./controllers/EmailController')
 
 const routes = express.Router()
 
-routes.post('/session', SessionController.index)
+routes.get('/session', SessionController.index)
+routes.post('/session', SessionController.recover)
 
 routes.post('/users', UserController.create)
 routes.get('/users', UserController.index)

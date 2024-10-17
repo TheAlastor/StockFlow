@@ -1,9 +1,9 @@
 exports.up = function (knex) {
   return knex.schema.createTable('requests', function (table) {
-    table.increments('request_id')
-    table.integer('reservation').primary()
+    table.increments('request_id').primary()
+    table.integer('reservation')
     table.bool('urgency').notNullable()
-    table.string('comments').notNullable()
+    table.string('comments')
     table.integer('step').notNullable()
     table.date('date')
 

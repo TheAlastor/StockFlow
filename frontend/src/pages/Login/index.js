@@ -17,20 +17,20 @@ export default function Logon() {
     }
 
     try {
-      const response = await api.post('session', login)
+      const response = await api.get('session', login)
 
       sessionStorage.setItem('id', response.data.sessionId)
-      
+
       sessionStorage.setItem('token', response.data.sessionToken)
-      
+
       sessionStorage.setItem('name', response.data.name)
-      
+
       sessionStorage.setItem('picture', response.data.picture)
 
-      alert(`Login em sucedido. Seu ID de acesso: ${response.data.sessionId}`)
+      alert(`Login successful`)
       navigate('/Menu')
     } catch (err) {
-      alert('Falha no login: ' + err.response.data.msg)
+      alert('Login failed: ' + err.response.data.msg)
     }
   }
 
