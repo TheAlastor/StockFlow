@@ -63,11 +63,11 @@ export default function Requests() {
     return null
   }
 
-  function findMaterialsUpdated(reservation, operation) {
+  function findMaterialsUpdated(request_id, operation) {
     const materialsUpdated = {}
 
     materials.forEach(material => {
-      if (material.reservation === reservation) {
+      if (material.request_id === request_id) {
         materialsUpdated[material.material_id] = material
         if (operation === 'canceled') {
           materialsUpdated[material.material_id].status = 5
@@ -246,8 +246,10 @@ export default function Requests() {
 
   async function handleNotifyButtonClick(request) {
     try {
+
+
       const materialsUpdated = findMaterialsUpdated(
-        request.reservation,
+        request.request_id,
         'notify'
       )
       const user = findUser(request.user_id)
@@ -279,12 +281,13 @@ export default function Requests() {
   async function handleCanceledButtonClick(request) {
     try {
       const materialsUpdated = findMaterialsUpdated(
-        request.reservation,
+        request.request_id,
         'canceled'
       )
       const user = findUser(request.user_id)
 
       request.step = 5
+      
       await api.put('materials', materialsUpdated)
       await api.put('requests', request)
 
@@ -351,7 +354,7 @@ export default function Requests() {
                   <div className="request-details">
                     {materials
                       .filter(
-                        material => material.reservation === request.reservation
+                        material => material.request_id === request.request_id
                       )
                       .map((material, j) => (
                         <div
@@ -382,7 +385,7 @@ export default function Requests() {
                             />
                           </form>
                           <form>
-                            <h2>Available for take out?</h2>
+                            <h2>Available for Withdrawal?</h2>
                             <div className="tab-buttons">
                               <button
                                 type="button"
@@ -411,7 +414,7 @@ export default function Requests() {
                             </div>
                           </form>
                           <form>
-                            <h2>Take out confirmed?</h2>
+                            <h2>Withdrawal confirmed?</h2>
                             <div className="tab-buttons">
                               <button
                                 type="button"

@@ -10,60 +10,12 @@ export default function NewRequest() {
   const userID = sessionStorage.getItem('id')
   const navigate = useNavigate()
 
-  async function handleRegister(e) {
-    e.preventDefault()
-
-    //Adiciona o número da reserva à todos os materiais que serão criados com a reserva
-    const dataMaterialSend = addReservation(
-      dataMaterial,
-      'reservation',
-      reservation
-    )
-
-    //Executa a função para mapear o array e identificar o step final da reserva criada
-    const step = findStep(dataMaterialSend, 'status') === true ? 3 : 1
-    const date = new Date().toISOString().slice(0, 10)
-
-    const dataRequest = {
-      reservation,
-      urgency,
-      comments,
-      step,
-      date
-    }
-
-    try {
-      const response = await api.post('requests', dataRequest, {
-        headers: {
-          Authorization: userID
-        }
-      })
-
-      await api.post('materials', dataMaterialSend)
-
-      alert(
-        `Solicitação criada. Identificação da Solicitação: ${response.data.id}`
-      )
-      navigate('/Menu')
-    } catch (err) {
-      alert('Erro na Solicitação: ' + err.response.data.msg)
-    }
-  }
-
-  function addReservation(dataMaterial, reservation, id) {
-    return dataMaterial.map(obj => {
-      obj[reservation] = id
-      return obj
-    })
-  }
-
-  function findStep(dataMaterial, status) {
-    return dataMaterial.every(obj => obj[status] === 3)
-  }
-
   const [reservation, setReservation] = useState()
-  function inputReservation(e) {
-    setReservation(e.target.value)
+  function inputReservation(e) {    
+    const value = e.target.value
+    if (/^\d*$/.test(value)) {     
+    setReservation(value)
+    }
   }
 
   const [urgency, setActiveUrgencyTab] = useState('0')
@@ -77,14 +29,24 @@ export default function NewRequest() {
   }
 
   const [dataMaterial, setMaterialData] = useState([
-    { code: '', quantity: '', status: 1, reservation: '' }
+    { code: '', quantity: '', status: 1, request_id: 0 }
   ])
+  
 
-  function lineChange(e, i) {
+  function quantityChange(e, i) {
     const { name, value } = e.target
     const onchangeVal = [...dataMaterial]
     onchangeVal[i][name] = value
     setMaterialData(onchangeVal)
+  }
+
+  function codeChange(e, i) {
+    const { name, value } = e.target
+    if (/^\d*$/.test(value)) {      
+      const onchangeVal = [...dataMaterial]
+      onchangeVal[i][name] = value
+      setMaterialData(onchangeVal)
+    }
   }
 
   const [activeLineTab, setActiveLineTab] = useState('No')
@@ -107,6 +69,84 @@ export default function NewRequest() {
     setMaterialData(deleteVal)
   }
 
+
+  function addRequestID(dataMaterial, parameter, id) {
+    return dataMaterial.map(obj => {
+      obj[parameter] = id
+      return obj
+    })
+  }
+
+  function findStep(dataMaterial, status) {
+    return dataMaterial.every(obj => obj[status] === 3)
+  }
+
+  function checkInput() {
+    
+    if (!reservation || reservation.length < 7) {
+      alert('Reservation number must be at least 7 characters long.');
+      return; 
+    }
+
+    const allQuantityValid = dataMaterial.every(item => item.quantity.length >= 3); 
+
+    if (!allQuantityValid) {
+      alert('Every material must have at least a quantity specified');
+      return; 
+    }
+
+    const allCodesValid = dataMaterial.every(item => item.code.length >= 12); 
+  
+    if (!allCodesValid) {
+      alert('SAP Code must be at least 12 characters long.');
+      return; 
+    }
+
+    return true;
+  }
+
+  async function handleRegister(e) {
+    e.preventDefault()
+
+    if (!checkInput()) return;
+    //Executa a função para mapear o array e identificar o step final da reserva criada
+    const step = findStep(dataMaterial, 'status') === true ? 3 : 1
+    const date = new Date().toISOString().slice(0, 10)
+
+    const dataRequest = {
+      reservation,
+      urgency,
+      comments,
+      step,
+      date
+    }
+
+    try {
+      const response = await api.post('requests', dataRequest, {
+        headers: {
+          Authorization: userID
+        }
+      })
+
+      //Adiciona o ID da requisição à todos os materiais que serão criados com a reserva
+    const dataMaterialSend = addRequestID(
+      dataMaterial,
+      'request_id',
+      response.data.request_id
+    )
+
+      await api.post('materials', dataMaterialSend)
+
+      alert(
+        `Solicitação criada. Identificação da Solicitação: ${response.data.request_id}`
+      )
+      navigate('/Menu')
+    } catch (err) {
+      alert('Erro na Solicitação: ' + err.response.data.msg)
+    }
+  }
+
+
   return (
     <div className="request-page-container">
       <Navbar />
@@ -127,10 +167,11 @@ export default function NewRequest() {
               <h2>Reservation Number</h2>
               <input
                 placeholder="XXXXXXX"
-                maxLength={7}
+                maxLength={7}                
                 tabIndex="1"
                 className="request-reservation"
                 onChange={e => inputReservation(e)}
+                value={reservation}
               />
             </form>
             <h2>Urgent?</h2>
@@ -151,7 +192,7 @@ export default function NewRequest() {
             <h2>Comments</h2>
             <input
               placeholder="Enter your observation here (optional)"
-              maxLength={150}
+              maxLength={35}
               tabIndex="2"
               className="request-comments"
               onChange={e => inputComments(e)}
@@ -168,23 +209,24 @@ export default function NewRequest() {
                   <h2>SAP Code</h2>
                   <input
                     placeholder="610000000"
+                    maxLength={12}                    
                     tabIndex="3"
                     name="code"
                     value={val.code}
-                    onChange={e => lineChange(e, i)}
+                    onChange={e => codeChange(e, i)}
                     className="request-SAP"
                   />
                 </form>
 
                 <form>
                   <h2>Quantity</h2>
-
                   <input
                     placeholder="XX units"
                     tabIndex="4"
                     name="quantity"
+                    maxLength={22}
                     value={val.quantity}
-                    onChange={e => lineChange(e, i)}
+                    onChange={e => quantityChange(e, i)}
                     className="request-quantity"
                   />
                 </form>

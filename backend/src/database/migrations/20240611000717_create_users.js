@@ -6,7 +6,7 @@ exports.up = function (knex) {
       table.string('p_mail').notNullable()
       table.string('f_mail').notNullable()
       table.mediumblob('picture').notNullable()
-      table.boolean('admin').defaultTo(false).notNullable()
+      table.integer('role').defaultTo(0).notNullable()
     })
   }
   

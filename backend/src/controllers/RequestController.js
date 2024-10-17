@@ -4,7 +4,7 @@ const connection = require('../database/connection')
 module.exports = {
   async index(request, response) {
     const requests = await connection('requests')
-      .leftJoin('materials', 'requests.reservation', 'materials.reservation')
+      .leftJoin('materials', 'requests.request_id', 'materials.request_id')
       .select(
         '*',
         connection.raw(`
@@ -34,7 +34,7 @@ module.exports = {
     console.log(request)
     const user_id = request.headers.authorization
 
-    const [id] = await connection('requests').insert({
+    const [request_id] = await connection('requests').insert({
       reservation,
       urgency,
       comments,
@@ -43,7 +43,7 @@ module.exports = {
       date
     })
 
-    return response.json({ id })
+    return response.json({ request_id })
   },
 
   async put(request, response) {

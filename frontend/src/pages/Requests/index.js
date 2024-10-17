@@ -11,6 +11,7 @@ export default function Requests() {
   const [users, setUsers] = useState([])
   const [materials, setMaterials] = useState([])
   const [refresh, setRefresh] = useState(false)
+  const [filterCompleted, setFilterCompleted] = useState(false)
 
   useEffect(() => {
     api.get('requests').then(response => {
@@ -23,6 +24,11 @@ export default function Requests() {
       setUsers(response.data)
     })
   }, [refresh])
+
+  function toggleFilterCompleted() {
+    setFilterCompleted(prevState => !prevState) // Toggle the state
+    setRefresh(prev => !prev)
+  }
 
   function handleLineTabClick(material_id, step) {
     const value = step
@@ -62,11 +68,11 @@ export default function Requests() {
     return null
   }
 
-  function findMaterialsUpdated(reservation, operation) {
+  function findMaterialsUpdated(request_id, operation) {
     const materialsUpdated = {}
 
     materials.forEach(material => {
-      if (material.reservation === reservation) {
+      if (material.request_id === request_id) {
         materialsUpdated[material.material_id] = material
         if (operation === 'confirmed') {
           materialsUpdated[material.material_id].status = 4
@@ -243,7 +249,7 @@ export default function Requests() {
   async function handleNotifyButtonClick(request) {
     try {
       const materialsUpdated = findMaterialsUpdated(
-        request.reservation,
+        request.request_id,
         'notify'
       )
       const user = findUser(request.user_id)
@@ -275,10 +281,15 @@ export default function Requests() {
   async function handleConfirmButtonClick(request) {
     try {
       const materialsUpdated = findMaterialsUpdated(
-        request.reservation,
+        request.request_id,
         'confirmed'
       )
       const user = findUser(request.user_id)
+
+      request.step = 4
+
+      await api.put('materials', materialsUpdated)
+      await api.put('requests', request)
 
       const response = await api.put('materials', materialsUpdated)
 
@@ -307,7 +318,9 @@ export default function Requests() {
 
       <div className="requests-container">
         <h1>StockFlow</h1>
-
+        <button onClick={toggleFilterCompleted}>
+            {filterCompleted ? 'Show All Requests' : 'Hide Status 5 Requests'}
+          </button>
         <div className="requests-colum1">
           <div className="requests-header">
             <h2 className="colum1">Request Number</h2>
@@ -321,7 +334,7 @@ export default function Requests() {
           </div>
 
           <div className="requests-lines">
-            {requests.map(request => (
+            {requests.filter(request => !filterCompleted || (request.step === 4 || request.step !== 5)).map(request => (
               <details key={request.request_id} className="details">
                 <summary>
                   <p className="colum1">REQ-23-00{request.request_id}</p>
@@ -343,7 +356,7 @@ export default function Requests() {
                 <div className="request-details">
                   {materials
                     .filter(
-                      material => material.reservation === request.reservation
+                      material => material.request_id === request.request_id
                     )
                     .map((material, j) => (
                       <div
@@ -374,7 +387,7 @@ export default function Requests() {
                           />
                         </form>
                         <form>
-                          <h2>Available for take out?</h2>
+                          <h2>Available for Withdrawal?</h2>
                           <div className="tab-buttons">
                             <button
                               type="button"
@@ -401,7 +414,7 @@ export default function Requests() {
                           </div>
                         </form>
                         <form>
-                          <h2>Take out confirmed?</h2>
+                          <h2>Withdrawal confirmed?</h2>
                           <div className="tab-buttons">
                             <button
                               type="button"

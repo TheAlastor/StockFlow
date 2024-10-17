@@ -20,8 +20,11 @@ export default function Logon() {
       const response = await api.post('session', login)
 
       sessionStorage.setItem('id', response.data.sessionId)
+      
       sessionStorage.setItem('token', response.data.sessionToken)
+      
       sessionStorage.setItem('name', response.data.name)
+      
       sessionStorage.setItem('picture', response.data.picture)
 
       alert(`Login em sucedido. Seu ID de acesso: ${response.data.sessionId}`)

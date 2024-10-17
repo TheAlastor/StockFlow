@@ -5,8 +5,8 @@ exports.up = function (knex) {
     table.string('quantity').notNullable()
     table.integer('status').notNullable()
 
-    table.integer('reservation').notNullable()
-    table.foreign('reservation').references('reservation').inTable('requests')
+    table.integer('request_id').notNullable()
+    table.foreign('request_id').references('request_id').inTable('requests')
   })
 }
 
