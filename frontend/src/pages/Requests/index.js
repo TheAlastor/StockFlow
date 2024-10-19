@@ -125,7 +125,7 @@ export default function Requests() {
       return
     }
 
-    if (user.role === 0 && user.user_id !== request.user_id) {
+    if (user.role === 0 && (user.user_id !== request.user_id)) {
       alert(
         `Error: User is not owner of RQ-23-${String(
           request.request_id
@@ -291,10 +291,11 @@ export default function Requests() {
   }
 
   async function handleNotifyButtonClick(request) {
-    const user = findUser(request.user_id)
-    if (!checkAction(user, request, 'notify')) return
+    const user = findUser(sessionStorage.getItem('id'))        
 
     try {
+      if (!checkAction(user, request, 'notify')) return
+
       const materialsUpdated = findMaterialsUpdated(
         request.request_id,
         'notify'
@@ -330,10 +331,11 @@ export default function Requests() {
   }
 
   async function handleConfirmButtonClick(request) {
-    const user = findUser(request.user_id)
-    if (!checkAction(user, request, 'confirm')) return
+    const user = findUser(sessionStorage.getItem('id'))        
 
     try {
+      if (!checkAction(user, request, 'confirm')) return
+
       const materialsUpdated = findMaterialsUpdated(
         request.request_id,
         'confirmed'

@@ -119,14 +119,9 @@ export default function Requests() {
         )} was already Canceled`
       )
       return
-    }
+    }    
 
-    if (user.role === 0 && action === 'confirm') {
-      alert(`Error: User has no permission to execute this action`)
-      return
-    }
-
-    if (user.role === 0 && user.user_id !== request.user_id) {
+    if (user.role === 0 && (user.user_id !== request.user_id)) {
       alert(
         `Error: User is not owner of RQ-23-${String(
           request.request_id
@@ -298,10 +293,10 @@ export default function Requests() {
   }
 
   async function handleNotifyButtonClick(request) {
-    const user = findUser(request.user_id)
-    if (!checkAction(user, request, 'confirm')) return
+    const user = findUser(sessionStorage.getItem('id'))        
 
     try {
+      if (!checkAction(user, request, 'notify')) return
       const materialsUpdated = findMaterialsUpdated(
         request.request_id,
         'notify'
@@ -337,10 +332,10 @@ export default function Requests() {
   }
 
   async function handleCanceledButtonClick(request) {
-    const user = findUser(request.user_id)
-    if (!checkAction(user, request, 'confirm')) return
+    const user = findUser(sessionStorage.getItem('id'))        
 
     try {
+      if (!checkAction(user, request, 'cancel')) return
       const materialsUpdated = findMaterialsUpdated(
         request.request_id,
         'canceled'
