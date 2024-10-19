@@ -9,8 +9,7 @@ const EmailController = require('./controllers/EmailController')
 
 const routes = express.Router()
 
-routes.get('/session', SessionController.index)
-routes.post('/session', SessionController.recover)
+routes.post('/session', SessionController.create)
 
 routes.post('/users', UserController.create)
 routes.get('/users', UserController.index)
@@ -26,6 +25,7 @@ routes.put('/materials', MaterialController.put)
 routes.get('/profile', ProfileController.index)
 
 routes.post('/email', EmailController.send)
+routes.put('/email', EmailController.recover)
 
 function checkToken(request, response, next) {
   const authHeader = request.headers['authorization']

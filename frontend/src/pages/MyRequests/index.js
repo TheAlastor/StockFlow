@@ -315,7 +315,7 @@ export default function Requests() {
       const html = buildMaterialUpdateEmail(materialsUpdated, request)
 
       const mail = {
-        to: `vinicius.ggarcia@hotmail.com`, //`{user.f_mail};{seniorstoreman.csp@modec.com}`,
+        to: user.f_mail, //`;${STOREKEEPER DEFAULT E-MAIL}`,
         subject: `Request Status Updated - Reservation: ${request.reservation}`,
         text: `Update`,
         html: html
@@ -354,7 +354,7 @@ export default function Requests() {
       const html = buildRequestCanceledEmail(materialsUpdated, request)
 
       const mail = {
-        to: `vinicius.ggarcia@hotmail.com`, //`{user.f_mail};{seniorstoreman.csp@modec.com}`,
+        to: user.f_mail, //`;${STOREKEEPER DEFAULT E-MAIL}`,
         subject: `Request Canceled - Reservation: ${request.reservation}`,
         text: `Canceled`,
         html: html
@@ -552,7 +552,7 @@ export default function Requests() {
                           className="Cancel-reservation"
                           onClick={() => handleCanceledButtonClick(request)}
                         >
-                          Cancel Reservation
+                          Cancel Request
                         </button>
                       </div>
                     </div>

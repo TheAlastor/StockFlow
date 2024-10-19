@@ -15,9 +15,10 @@ export default function Logon() {
       p_mail,
       password
     }
-
+    
     try {
-      const response = await api.get('session', login)
+
+      const response = await api.post('session', login)
 
       sessionStorage.setItem('id', response.data.sessionId)
 
@@ -54,7 +55,7 @@ export default function Logon() {
             <h2>Login</h2>
             <h3>Enter your e-mail to sign in</h3>
             <input
-              placeholder="email@modec.com"
+              placeholder="email@domain.com"
               onChange={e => inputP_Mail(e)}
             />
             <input
@@ -70,9 +71,7 @@ export default function Logon() {
             </Link>
 
             <h4>OR</h4>
-
-            <input placeholder="email@modec.com" />
-
+            
             <Link to="Register" className="link-wrapper">
               <button className="button">Sign up with personal e-mail</button>
             </Link>

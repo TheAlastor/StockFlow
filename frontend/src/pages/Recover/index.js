@@ -9,24 +9,22 @@ export default function Recover() {
   const navigate = useNavigate()
 
   const [p_mail, setP_Mail] = useState('None')
-  function inputP_Mail(e) {
-    console.log(p_mail)
-    setP_Mail(e.target.value)
-    console.log(p_mail)
+  function inputP_Mail(e) {    
+    setP_Mail(e.target.value)    
   }
 
   async function handleRecover(e) {
     e.preventDefault()
 
-    const send = { p_mail: p_mail }
+    const recover = { p_mail: p_mail }
 
     try {
-      const response = await api.post('session', send)
-
-      alert(`Login successful`)
-      navigate('/Menu')
+      
+      const response = await api.put('email', recover)
+           
+      alert(response.data.msg)      
     } catch (err) {
-      alert('Login failed: ' + err.response.data.msg)
+      alert('Error: ' + err.response.data.msg)
     }
   }
 
@@ -40,7 +38,7 @@ export default function Recover() {
             <h2>Recover Password</h2>
             <h3>Enter your persornal e-mail to retrieve password</h3>
             <input
-              placeholder="email@company.com"
+              placeholder="email@domain.com"
               onChange={e => inputP_Mail(e)}
             />
 

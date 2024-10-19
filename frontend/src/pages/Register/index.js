@@ -120,7 +120,7 @@ export default function Register() {
               />
               <h2>Personal E-mail</h2>
               <input
-                placeholder="email@modec.com"
+                placeholder="email@domain.com"
                 tabIndex="3"
                 onChange={handlePersonalMailChange}
               />
@@ -145,7 +145,7 @@ export default function Register() {
               />
               <h2>Onboard Position E-mail</h2>
               <input
-                placeholder="email@modec.com"
+                placeholder="email@domain.com"
                 tabIndex="3"
                 onChange={handleFunctionMailChange}
               />

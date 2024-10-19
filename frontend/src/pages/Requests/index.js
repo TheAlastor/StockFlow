@@ -308,7 +308,7 @@ export default function Requests() {
       const html = buildMaterialUpdateEmail(materialsUpdated, request)
 
       const mail = {
-        to: `vinicius.ggarcia@hotmail.com`, //`{user.f_mail};{seniorstoreman.csp@modec.com}`,
+        to: user.f_mail, //`;${STOREKEEPER DEFAULT E-MAIL}`,
         subject: `Request Status Updated - Reservation: ${request.reservation}`,
         text: `Update`,
         html: html
@@ -349,7 +349,7 @@ export default function Requests() {
       const html = buildRequestConfirmedEmail(materialsUpdated, request)
 
       const mail = {
-        to: `vinicius.ggarcia@hotmail.com`, //`{user.f_mail};{seniorstoreman.csp@modec.com}`,
+        to: user.f_mail, //`;${STOREKEEPER DEFAULT E-MAIL}`,
         subject: `Request Confirmed - Reservation: ${request.reservation}`,
         text: `Confirmed`,
         html: html
