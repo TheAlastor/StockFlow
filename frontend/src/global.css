@@ -101,9 +101,9 @@ form input{
     text-align: center;
     text-decoration: none;
     font-size: 18px;
-    transition: filter 0.2;  /*cria uma delay na transição do elemento quando houver um comportamento de interação defenido */
+    transition: filter 0.2;  
 }
 
-.button:hover{ /*define o comportamento do elemento quando o mouse estiver sobre ele.*/
-    filter: brightness(70%)   /*remove o brilho do elemento*/
+.button:hover{ 
+    filter: brightness(70%)   
 }

@@ -28,8 +28,8 @@ export default function Logon() {
 
       alert(`Login successful`)
       navigate('/Menu')
-    } catch (error) {
-      alert('Login failed: ' + error.response.data.error)
+    } catch (err) {
+      alert('Error: ' + err)
     }
   }
 
