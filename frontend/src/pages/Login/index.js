@@ -1,5 +1,4 @@
 import './styles.css'
-import { FiLogIn } from 'react-icons/fi'
 import { Link, useNavigate } from 'react-router-dom'
 import React, { useState } from 'react'
 import api from '../../services/api'
@@ -15,9 +14,8 @@ export default function Logon() {
       p_mail,
       password
     }
-    
-    try {
 
+    try {
       const response = await api.post('session', login)
 
       sessionStorage.setItem('id', response.data.sessionId)
@@ -30,8 +28,8 @@ export default function Logon() {
 
       alert(`Login successful`)
       navigate('/Menu')
-    } catch (err) {
-      alert('Login failed: ' + err.response.data.msg)
+    } catch (error) {
+      alert('Login failed: ' + error.response.data.error)
     }
   }
 
@@ -71,7 +69,7 @@ export default function Logon() {
             </Link>
 
             <h4>OR</h4>
-            
+
             <Link to="Register" className="link-wrapper">
               <button className="button">Sign up with personal e-mail</button>
             </Link>

@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import '../MyRequests/styles.css'
-import { FiLogIn } from 'react-icons/fi'
-import { Link } from 'react-router-dom'
 import userImage from '../../../src/user.png'
 import api from '../../services/api'
 import Navbar from '../../Navbar'
@@ -37,17 +35,15 @@ export default function Requests() {
 
     onchangeVal.forEach((material, i) => {
       if (material.material_id === material_id) {
-        if (value == 0 && onchangeVal[i].status == 3) {
+        if (value === 0 && onchangeVal[i].status === 3) {
           onchangeVal[i].status = 2
-        } else {
-          if (
-            value == 0 &&
-            (onchangeVal[i].status == 1 || onchangeVal[i].status == 2)
-          ) {
-            onchangeVal[i].status = onchangeVal[i].status
-          } else {
-            onchangeVal[i].status = value
-          }
+        } else if (
+          !(
+            value === 0 &&
+            (onchangeVal[i].status === 1 || onchangeVal[i].status === 2)
+          )
+        ) {
+          onchangeVal[i].status = value
         }
       }
     })
@@ -119,9 +115,9 @@ export default function Requests() {
         )} was already Canceled`
       )
       return
-    }    
+    }
 
-    if (user.role === 0 && (user.user_id !== request.user_id)) {
+    if (user.role === 0 && user.user_id !== request.user_id) {
       alert(
         `Error: User is not owner of RQ-23-${String(
           request.request_id
@@ -293,7 +289,7 @@ export default function Requests() {
   }
 
   async function handleNotifyButtonClick(request) {
-    const user = findUser(sessionStorage.getItem('id'))        
+    const user = findUser(sessionStorage.getItem('id'))
 
     try {
       if (!checkAction(user, request, 'notify')) return
@@ -332,7 +328,7 @@ export default function Requests() {
   }
 
   async function handleCanceledButtonClick(request) {
-    const user = findUser(sessionStorage.getItem('id'))        
+    const user = findUser(sessionStorage.getItem('id'))
 
     try {
       if (!checkAction(user, request, 'cancel')) return
@@ -355,7 +351,7 @@ export default function Requests() {
         html: html
       }
 
-      const response2 = await api.post('email', mail)
+      await api.post('email', mail)
 
       setRefresh(prev => !prev)
 
@@ -424,7 +420,11 @@ export default function Requests() {
                     <p className="colum4">STEP {request.step}</p>
                     <p className="colum5">{formatDate(request.date)}</p>
                     <div className="userImage">
-                      <img src={userImage} className="circular-image" />
+                      <img
+                        src={userImage}
+                        alt="user profile"
+                        className="circular-image"
+                      />
                     </div>
                     <p className="colum6">
                       {findUser(request.user_id)
@@ -534,6 +534,7 @@ export default function Requests() {
                           tabIndex="2"
                           className="myrequest-comments"
                           value={request.comments}
+                          readOnly
                         />
                       </div>
                       <div className="Buttons">

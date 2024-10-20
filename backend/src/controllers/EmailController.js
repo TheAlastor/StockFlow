@@ -8,8 +8,8 @@ module.exports = {
   // Controller function to handle email-sending logic
   async send(request, response) {
     const { to, subject, text, html } = request.body
-    console.log('Email User:', process.env.EMAIL_USER)
-    console.log('Email pass:', process.env.EMAIL_PASS)
+    console.log('Sending Email...')
+
     try {
       await transporter.sendMail({
         from: 'Stock Flow <MV23.stockflow@gmail.com>',
@@ -19,9 +19,7 @@ module.exports = {
         html
       })
 
-      return response
-        .status(200)
-        .json({ message: 'Email sent successfully' })
+      return response.status(200).json({ message: 'Email sent successfully' })
     } catch (error) {
       console.error('Error sending email:', error)
       return response.status(500).json({ error: 'Failed to send email' })
@@ -38,14 +36,15 @@ module.exports = {
         msg: 'This user do not exists. Try another personal e-mail.'
       })
     } else {
-      
-      const newPassword = crypto.randomBytes(6).toString('base64').slice(0, 6).toUpperCase()
-      
+      const newPassword = crypto
+        .randomBytes(6)
+        .toString('base64')
+        .slice(0, 6)
+        .toUpperCase()
+
       const html = buildRecoverPasswordEmail(newPassword)
 
-      await connection('users')
-      .where('user_id', userExist.user_id)
-      .update({
+      await connection('users').where('user_id', userExist.user_id).update({
         password: newPassword
       })
 
@@ -58,10 +57,10 @@ module.exports = {
       })
 
       return response.status(200).json({
-        msg: 'A new password has just been sent to your personal e-mail.'   
+        msg: 'A new password has just been sent to your personal e-mail.'
       })
     }
-       
+
     function buildRecoverPasswordEmail(newPassword) {
       let htmlContent = `
       <html>
@@ -89,10 +88,8 @@ module.exports = {
           <h3>${newPassword}</h3>
         </body>
       </html>
-    `  
+    `
       return htmlContent
     }
-   
   }
- 
 }

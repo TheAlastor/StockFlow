@@ -14,8 +14,9 @@ export default function AllRoutes() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/login/Register" element={<Register />} />
+        <Route path="/login/register" element={<Register />} />
         <Route path="/login/recover" element={<Recover />} />
         <Route element={<CheckLogin />}>
           <Route path="/menu" element={<Menu />} />

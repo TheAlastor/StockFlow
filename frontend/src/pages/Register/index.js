@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import './styles.css'
-import { FiLogIn } from 'react-icons/fi'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import userImage from '../../../src/user.png'
 import api from '../../services/api'
 import Navbar from '../../Navbar'
@@ -12,7 +11,7 @@ export default function Register() {
   async function handleRegister(e) {
     e.preventDefault()
 
-    if (repeatPassword != password) {
+    if (repeatPassword !== password) {
       alert(`Password not match`)
     } else {
       const dataUser = {
@@ -174,7 +173,11 @@ export default function Register() {
 
           <div className="user-profile">
             <div className="user-picture">
-              <img src={picture} className="circular-image" />
+              <img
+                src={picture}
+                alt="User profile"
+                className="circular-image"
+              />
             </div>
 
             <div className="user-name">

@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import './styles.css'
-import { FiLogIn } from 'react-icons/fi'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import api from '../../services/api'
 import Navbar from '../../Navbar'
 
@@ -48,9 +47,7 @@ export default function NewRequest() {
     }
   }
 
-  const [activeLineTab, setActiveLineTab] = useState('No')
   function handleLineTabClick(tab, i) {
-    setActiveLineTab(tab)
     const name = 'status'
     const value = tab === 'Yes' ? 3 : 1
     const onchangeVal = [...dataMaterial]
@@ -163,6 +160,7 @@ export default function NewRequest() {
                 placeholder="User Name"
                 className="request-userName"
                 value={userName}
+                readOnly
               />
 
               <h2>Reservation Number</h2>

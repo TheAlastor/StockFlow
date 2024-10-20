@@ -1,6 +1,5 @@
 import React from 'react'
 import './styles.css'
-import { FiLogIn } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
 import Navbar from '../../Navbar'
 
@@ -13,9 +12,7 @@ export default function Menu() {
       <div className="menu-container">
         <section className="form-menu">
           <form>
-            <Link to="http://localhost:3000/NewRequest">
-              New Request
-            </Link>
+            <Link to="http://localhost:3000/NewRequest">New Request</Link>
             <Link to="/MyRequests">My Requests</Link>
             <Link to="/Requests">All Requests</Link>
             <Link to="/AccountSettings">Account Settings</Link>
