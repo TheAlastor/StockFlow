@@ -22,7 +22,7 @@ export default function NewRequest() {
     setActiveUrgencyTab(tab === 'Yes' ? '1' : '0')
   }
 
-  const [comments, setComments] = useState()
+  const [comments, setComments] = useState('')
   function inputComments(e) {
     setComments(e.target.value)
   }

@@ -18,8 +18,14 @@ export default function Recover() {
       const response = await api.put('email', recover)
 
       alert(response.data.msg)
-    } catch (err) {
-      alert('Error: ' + err.response.data.msg)
+    } catch (error) {
+      if (error.response) {
+        alert(error.response.data.msg)
+      } else if (error.request) {
+        alert('Server is unreachable. Please try again later.')
+      } else {
+        alert('An unexpected error occurred: ' + error.message)
+      }
     }
   }
 

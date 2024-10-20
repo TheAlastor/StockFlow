@@ -8,31 +8,6 @@ import Navbar from '../../Navbar'
 export default function Register() {
   const navigate = useNavigate()
 
-  async function handleRegister(e) {
-    e.preventDefault()
-
-    if (repeatPassword !== password) {
-      alert(`Password not match`)
-    } else {
-      const dataUser = {
-        name: name + ' ' + lastName,
-        password,
-        p_mail,
-        f_mail,
-        picture
-      }
-
-      try {
-        const response = await api.post('users', dataUser)
-
-        alert(`User created successfully. User ID: ${response.data.user_id}`)
-        navigate('/login')
-      } catch (err) {
-        alert('Error: ' + err.response.data.msg)
-      }
-    }
-  }
-
   /////////////// Get First and Last Name for Profile Preview /////
   const getLastWord = phrase => {
     const words = phrase.trim().split(' ')
@@ -44,7 +19,7 @@ export default function Register() {
   }
 
   /////////////// Change  Name of Profile Preview /////
-  const [name, setName] = useState()
+  const [name, setName] = useState('')
   function handleNameChange(e) {
     let value = getFirstWord(e.target.value)
     const formattedValue =
@@ -53,7 +28,7 @@ export default function Register() {
   }
 
   ////////////////// Change Last Name of Profile Preview ////////
-  const [lastName, setLastName] = useState()
+  const [lastName, setLastName] = useState('')
   function handleLastNameChange(e) {
     let value = getLastWord(e.target.value)
     const formattedValue =
@@ -62,7 +37,7 @@ export default function Register() {
   }
 
   ////////////////// Change Last Name of Profile Preview ////////
-  const [p_mail, setPersonalMail] = useState()
+  const [p_mail, setPersonalMail] = useState('')
   function handlePersonalMailChange(e) {
     let value = e.target.value
     const formattedValue = value.toLowerCase()
@@ -70,7 +45,7 @@ export default function Register() {
   }
 
   ////////////////// Change Last Name of Profile Preview ////////
-  const [f_mail, setFunctionMail] = useState()
+  const [f_mail, setFunctionMail] = useState('')
   function handleFunctionMailChange(e) {
     let value = e.target.value
     const formattedValue = value.toLowerCase()
@@ -78,13 +53,13 @@ export default function Register() {
   }
 
   ////////////////// Change Last Name of Profile Preview ////////
-  const [password, setPassword] = useState()
+  const [password, setPassword] = useState('')
   function handlePasswordChange(e) {
     setPassword(e.target.value)
   }
 
   ////////////////// Change Last Name of Profile Preview ////////
-  const [repeatPassword, setRepeatPassword] = useState()
+  const [repeatPassword, setRepeatPassword] = useState('')
   function handleRepeatPasswordChange(e) {
     setRepeatPassword(e.target.value)
   }
@@ -100,6 +75,58 @@ export default function Register() {
   }
 
   /////////////////////////////////////////////////////////
+
+  function checkInput() {
+    if (name === '' || lastName === '') {
+      alert(`Name and Last Name can't be empty`)
+      return false
+    }
+
+    if (p_mail === '' || f_mail === '') {
+      alert(`Personal E-mail and Function E-mail can't be empty`)
+      return false
+    }
+
+    if (repeatPassword === '' || password === '') {
+      alert(`Password can't be empty`)
+      return false
+    }
+
+    if (repeatPassword !== password) {
+      alert(`Password not match`)
+      return false
+    }
+
+    return true
+  }
+
+  async function handleRegister(e) {
+    e.preventDefault()
+
+    const dataUser = {
+      name: name + ' ' + lastName,
+      password,
+      p_mail,
+      f_mail,
+      picture
+    }
+
+    try {
+      if (!checkInput()) return
+      const response = await api.post('users', dataUser)
+
+      alert(`User created successfully. User ID: ${response.data.user_id}`)
+      navigate('/login')
+    } catch (error) {
+      if (error.response) {
+        alert(error.response.data.msg)
+      } else if (error.request) {
+        alert('Server is unreachable. Please try again later.')
+      } else {
+        alert('An unexpected error occurred: ' + error.message)
+      }
+    }
+  }
 
   return (
     <div className="register-page-container">

@@ -28,8 +28,14 @@ export default function Logon() {
 
       alert(`Login successful`)
       navigate('/Menu')
-    } catch (err) {
-      alert('Error: ' + err)
+    } catch (error) {
+      if (error.response) {
+        alert(error.response.data.msg)
+      } else if (error.request) {
+        alert('Server is unreachable. Please try again later.')
+      } else {
+        alert('An unexpected error occurred: ' + error.message)
+      }
     }
   }
 

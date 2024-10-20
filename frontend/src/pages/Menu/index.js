@@ -12,7 +12,7 @@ export default function Menu() {
       <div className="menu-container">
         <section className="form-menu">
           <form>
-            <Link to="http://localhost:3000/NewRequest">New Request</Link>
+            <Link to="/NewRequest">New Request</Link>
             <Link to="/MyRequests">My Requests</Link>
             <Link to="/Requests">All Requests</Link>
             <Link to="/AccountSettings">Account Settings</Link>

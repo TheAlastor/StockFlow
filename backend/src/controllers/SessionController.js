@@ -6,9 +6,8 @@ require('dotenv').config()
 
 module.exports = {
   async create(request, response) {
-    const { p_mail, password } = request.body
-
     try {
+      const { p_mail, password } = request.body
       const userExist = await connection('users').where({ p_mail }).first()
 
       if (!userExist) {
@@ -39,7 +38,7 @@ module.exports = {
       return response.status(200).json(session)
     } catch (error) {
       console.error('Error sending email:', error)
-      return response.status(500).json({ error })
+      return response.status(500).json({ msg: error })
     }
   }
 }
