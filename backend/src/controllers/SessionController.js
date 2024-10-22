@@ -27,12 +27,14 @@ module.exports = {
       const sessionId = userExist.user_id
       const name = userExist.name
       const picture = userExist.picture
+      const f_mail = userExist.f_mail
 
       const session = {
         sessionId,
         sessionToken,
         name,
-        picture
+        picture,
+        f_mail
       }
 
       return response.status(200).json(session)

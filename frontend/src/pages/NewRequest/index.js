@@ -7,6 +7,7 @@ import Navbar from '../../Navbar'
 export default function NewRequest() {
   const userName = sessionStorage.getItem('name')
   const userID = sessionStorage.getItem('id')
+  const f_mail = sessionStorage.getItem('f_mail')
   const navigate = useNavigate()
 
   const [reservation, setReservation] = useState()
@@ -101,6 +102,84 @@ export default function NewRequest() {
     return true
   }
 
+  function buildRequestCreatedEmail(materialsSend, request) {
+    let htmlContent = `
+    <html>
+      <head>
+        <style>
+          table {
+            width: 100%;
+            border-collapse: collapse;
+          }
+          table, th, td {
+            border: 1px solid black;
+          }
+          th, td {
+            padding: 10px;
+            text-align: left;
+          }
+          th {
+            background-color: #f2f2f2;
+          }
+        </style>
+      </head>
+      <body>
+        <h1>StockFlow</h1>        
+        <h2>The request RQ-23-${String(request).padStart(
+          5,
+          '0'
+        )} was created.</h2>
+        <p>Check below the material list and status:</p>        
+        <table>
+          <thead>
+            <tr>              
+              <th>SAP Code</th>
+              <th>Quantity</th>
+              <th>Status</th>              
+            </tr>
+          </thead>
+          <tbody>`
+
+    Object.keys(materialsSend).forEach(key => {
+      const material = materialsSend[key]
+      let statusText
+      switch (material.status) {
+        case 1:
+          statusText = 'Requested'
+          break
+        case 2:
+          statusText = 'Available for withdrawal'
+          break
+        case 3:
+          statusText = 'Withdrawal confirmed'
+          break
+        case 4:
+          statusText = 'Withdrawal confirmed - Request concluded'
+          break
+        default:
+          statusText = 'Unknown status'
+      }
+
+      htmlContent += `
+      <tr>        
+        <td>${material.code}</td>
+        <td>${material.quantity}</td>
+        <td>${statusText}</td>        
+      </tr>`
+    })
+
+    htmlContent += `
+          </tbody>
+        </table>
+      </body>
+    </html>
+  `
+
+    return htmlContent
+  }
+
+
+
   async function handleRegister(e) {
     e.preventDefault()
 
@@ -132,6 +211,17 @@ export default function NewRequest() {
       )
 
       await api.post('materials', dataMaterialSend)
+
+      const html = buildRequestCreatedEmail(dataMaterialSend, response.data.request_id)
+
+      const mail = {
+        to: f_mail, //`;${STOREKEEPER DEFAULT E-MAIL}`,
+        subject: `Request Created - Reservation: ${reservation}`,
+        text: `Create`,
+        html: html
+      }
+
+      await api.post('email', mail)
 
       alert(
         `Request RQ-23-${String(response.data.request_id).padStart(

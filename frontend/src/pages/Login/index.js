@@ -26,6 +26,8 @@ export default function Logon() {
 
       sessionStorage.setItem('picture', response.data.picture)
 
+      sessionStorage.setItem('f_mail', response.data.f_mail)
+
       alert(`Login successful`)
       navigate('/Menu')
     } catch (error) {
@@ -41,7 +43,7 @@ export default function Logon() {
 
   const [p_mail, setP_Mail] = useState('None')
   function inputP_Mail(e) {
-    setP_Mail(e.target.value)
+    setP_Mail(e.target.value.toLowerCase())
   }
 
   const [password, setPassword] = useState('None')
